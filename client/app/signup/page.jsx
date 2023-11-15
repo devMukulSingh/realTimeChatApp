@@ -10,6 +10,7 @@ import axios from 'axios';
 import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '@/utils/firebase.config';
 import { getUser } from '@/redux/slice';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
 
@@ -24,6 +25,7 @@ const page = () => {
   const[ newUserData, setNewUserData ] = useState(userData); 
   const { user } = useSelector( state => state.userSlice);
   const [firebaseUser, setFirebaseUser] = useState(null);
+  const router = useRouter();
  
   // useEffect( () => {
   //   getDataFromRedux();
@@ -60,7 +62,11 @@ const page = () => {
  
     }
   const handleCreateProfile = async() => {
-      await axios.post(ADD_USER_ROUTE,{ ...firebaseUser,...newUserData});
+    const res = await axios.post(ADD_USER_ROUTE,{ ...firebaseUser,...newUserData});
+    if(res?.status){
+      router.push("/home");
+    }
+    console.log(res);
   }
 
 
