@@ -11,8 +11,8 @@ try {
              const messages = await prisma.messages.create({
                  data:{
                      message:message,
-                     sender: from,
-                     receiver: to ,
+                     sender: { connect : { id:from }} ,
+                     receiver: { connect : { id: to }} ,
                      messageStatus:" "
                  }
              })

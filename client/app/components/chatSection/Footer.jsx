@@ -16,7 +16,6 @@ const Footer = () => {
       setMessage(e.target.value);
   }
   const handleMessageSend = async(e) => {
-    if(e.key=="Enter"){
       try {
           await axios.post(ADD_MESSAGE_ROUTE, { message:message, from:currentUser[0]?.id, to:user?.id }  );
           setMessage("");
@@ -24,7 +23,7 @@ const Footer = () => {
         console.log(`Error in handleMessageSend ${error}`);
       }
     }
-  }
+  
   return (
     <>
         <main className='flex w-full px-5 py-3 gap-4 items-center h-20 bg-[#202C33] absolute bottom-0'>
