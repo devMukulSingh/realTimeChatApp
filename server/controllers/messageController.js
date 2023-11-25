@@ -24,3 +24,30 @@ try {
 }
 
 }
+
+export const getMessageController = async(req,res,next) => {
+    try {
+        const { to, from } = req.body;
+        const prisma = getprismaInstance();
+        const messages = await prisma.messages.findMany({
+            where : {
+                OR:[
+                    {
+                        senderId : to,
+                        receiverId : from, 
+                    },
+                    {
+                        senderId: from,
+                        receiverId : to,
+                    }
+                ]
+            },
+            orderBy : {
+                id : "asc"
+            }
+        });
+        return res.json(messages);
+    } catch (error) {
+        next(`Error in get Message Controller ${error}`);
+    }   
+}

@@ -8,7 +8,6 @@ const SingleContact = ({ contact }) => {
 
     const dispatch = useDispatch();
     const handleOpenChat = () => {
-      console.log(contact);
         dispatch(getUser({...contact}));
     }
   return (
