@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { ADD_MESSAGE_ROUTE } from "../../../utils/apiRoutes";
  
 const Footer = () => {
-  const{ currentUser, user } = useSelector( state => state.userSlice );
+  const{ currentUser, user, socket } = useSelector( state => state.userSlice );
 
   const [message, setMessage] = useState("");
 
@@ -17,8 +17,13 @@ const Footer = () => {
   }
   const handleMessageSend = async(e) => {
       try {
-          await axios.post(ADD_MESSAGE_ROUTE, { message:message, from:currentUser[0]?.id, to:user?.id }  );
+          const { data} = await axios.post(ADD_MESSAGE_ROUTE, { message:message, from:currentUser[0]?.id, to:user?.id }  );
           setMessage("");
+          socket.current.emit("send-msg", {
+            from:currentUser[0]?.id, 
+            to:user?.id,
+            message:data?.message
+          })
         } catch (error) {
         console.log(`Error in handleMessageSend ${error}`);
       }

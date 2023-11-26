@@ -1,4 +1,4 @@
-const HOST = "http://localhost:8000";
+export const HOST = "http://localhost:8000";
 
 const AUTH_ROUTE = `${HOST}/api/auth`;
 const MESSAGE_ROUTE = `${HOST}/api/message`;

@@ -6,7 +6,9 @@ const userSlice = createSlice({
 
     initialState:{
         user:{},
-        currentUser:[]
+        currentUser:[],
+        socket:{},
+        messages:[],
     },
     reducers:{
         getUser : ( state,action ) => {
@@ -14,9 +16,17 @@ const userSlice = createSlice({
         },
         getCurrentUser : ( state,action ) => {
             state.currentUser.push(action.payload);
+        },
+    
+        getSocket : ( state,action ) => {
+            state.socket = action.payload;
+        },
+
+        getMessages : ( state,action ) => {
+            state.messages = action.payload;
         }
     }
 })
 
-export const{ getUser, getCurrentUser } = userSlice.actions;
+export const{ getUser, getCurrentUser, getSocket, getMessages } = userSlice.actions;
 export default userSlice.reducer;
