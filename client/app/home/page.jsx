@@ -32,11 +32,11 @@ const page = () => {
     useEffect( () => {
       if(currentUser){
         socket.current = io(HOST);
-        socket.current.emit("add-user", currentUser[0]?.id);
-        console.log(socket);
+        socket.current.emit("add-user", currentUser?.id);
+        console.log(socket.current);
         dispatch(getSocket(socket.current));
       }
-    },[currentUser]);
+    },[currentUser, user]);
 
     useEffect(() => {
       if(socket.current && !socketEvent){
@@ -50,9 +50,8 @@ const page = () => {
     onAuthStateChanged( firebaseAuth, async(firebaseUser) => {
 
         if( !firebaseUser) setRedirectLogin(true);
-        if( currentUser?.length === 0 && firebaseUser?.email ){
+        if( Object.keys(currentUser).length === 0 && firebaseUser?.email ){
           const { data } = await axios.post( CHECK_USER_ROUTE, { email: firebaseUser?.email } );
-  
           if(!data?.status){
             router.push("/");
           }

@@ -6,7 +6,7 @@ const userSlice = createSlice({
 
     initialState:{
         user:{},
-        currentUser:[],
+        currentUser:{},
         socket:{},
         messages:[],
     },
@@ -15,7 +15,7 @@ const userSlice = createSlice({
             state.user = action.payload;
         },
         getCurrentUser : ( state,action ) => {
-            state.currentUser.push(action.payload);
+            state.currentUser = action.payload;
         },
     
         getSocket : ( state,action ) => {

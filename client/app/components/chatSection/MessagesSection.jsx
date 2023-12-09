@@ -15,14 +15,13 @@ const MessagesSection = () => {
   }, [user]);
  
   const getMessages = async() => {
-    const { data } = await axios.post(GET_MESSAGES_ROUTE, { to:user?.id , from : currentUser[0]?.id });
+    const { data } = await axios.post(GET_MESSAGES_ROUTE, { to:user?.id , from : currentUser?.id });
     setUserData(data);
- 
   };
   
   return (
     <>
-      <main className='w-full h-full max-h-[85vh] overflow-hidden bg-[#111b21]' >
+      <main className='w-full h-full max-h-[85vh] overflow-auto bg-[#111b21]' >
           {
             userData && userData?.map( (user,index) => {
               return (

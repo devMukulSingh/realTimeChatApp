@@ -14,7 +14,7 @@ const ContactsHeader = () => {
     <>
         <main className='bg-[#202C33] w-full h-16 p-4 text-white flex items-center justify-between'>
             <div className='flex'>
-                <Image src={currentUser[0]?.photoURL} width={50} height={50} alt='profile Image' className='cursor-pointer rounded-full'/>
+                <Image src={currentUser?.photoURL} width={50} height={50} alt='profile Image' className='cursor-pointer rounded-full'/>
             </div>
             <div className='flex gap-8'>
                 <CiMenuKebab className='text-xl cursor-pointer'/>
