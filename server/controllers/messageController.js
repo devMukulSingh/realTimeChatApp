@@ -28,6 +28,9 @@ try {
 export const getMessageController = async(req,res,next) => {
     try {
         const { to, from } = req.body;
+        if( !to || !from ){
+            return res.status(300).json('To and From not found');
+        }
         const prisma = getprismaInstance();
         const messages = await prisma.messages.findMany({
             where : {
@@ -46,7 +49,7 @@ export const getMessageController = async(req,res,next) => {
                 id : "asc"
             }
         });
-        return res.json(messages);
+        return res.status(201).json(messages);
     } catch (error) {
         next(`Error in get Message Controller ${error}`);
     }   

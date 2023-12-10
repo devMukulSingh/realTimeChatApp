@@ -1,10 +1,10 @@
 import React from 'react'
 
-const SingleMessage = ({user}) => {
+const SingleMessage = ({currUser}) => {
   return (
     <>
       <main className = "text-white">
-       {user?.message} 
+       {currUser?.message} 
       </main>
     </>
   )

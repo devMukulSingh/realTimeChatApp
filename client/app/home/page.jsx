@@ -21,7 +21,7 @@ const page = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const [redirectLogin, setRedirectLogin] = useState(false);
-    const { currentUser,user } = useSelector( state => state.userSlice );
+    const { currentUser,receiverUser } = useSelector( state => state.userSlice );
     const socket = useRef(null);
     const [socketEvent, setSocketEvent] = useState(false);
  
@@ -33,10 +33,9 @@ const page = () => {
       if(currentUser){
         socket.current = io(HOST);
         socket.current.emit("add-user", currentUser?.id);
-        console.log(socket.current);
         dispatch(getSocket(socket.current));
       }
-    },[currentUser, user]);
+    },[currentUser, receiverUser]);
 
     useEffect(() => {
       if(socket.current && !socketEvent){
@@ -70,7 +69,7 @@ const page = () => {
 
       <>
         {
-          Object.keys(user)?.length===0 ?
+          Object.keys(receiverUser)?.length===0 ?
               <div className='flex items-center justify-center bg-[#202C33] basis-3/4'>
                   <Image src={logo} alt="logo" width={400} />
               </div> 

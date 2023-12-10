@@ -12,6 +12,7 @@ const ContactsList = () => {
   const [users, setUsers] = useState(null);
   const getUsersApi = async() => {
     const { data } = await axios.get(GET_USERS_ROUTE);
+    // console.log(data);
     setUsers(data);
   }
 

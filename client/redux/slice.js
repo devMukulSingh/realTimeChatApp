@@ -5,14 +5,14 @@ const userSlice = createSlice({
     name:'user',
 
     initialState:{
-        user:{},
+        receiverUser:{},
         currentUser:{},
         socket:{},
         messages:[],
     },
     reducers:{
-        getUser : ( state,action ) => {
-            state.user = action.payload;
+        getReceiverUser : ( state,action ) => {
+            state.receiverUser = action.payload;
         },
         getCurrentUser : ( state,action ) => {
             state.currentUser = action.payload;
@@ -28,5 +28,5 @@ const userSlice = createSlice({
     }
 })
 
-export const{ getUser, getCurrentUser, getSocket, getMessages } = userSlice.actions;
+export const{ getReceiverUser, getCurrentUser, getSocket, getMessages } = userSlice.actions;
 export default userSlice.reducer;

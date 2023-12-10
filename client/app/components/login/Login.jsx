@@ -19,12 +19,13 @@ const page = () => {
   const handleLogin = async() => {
     try {
       const provider = new GoogleAuthProvider();
-      const { user : { displayName:name,email, photoURL } } = await signInWithPopup( firebaseAuth, provider);
-        // console.log(name,email,photoURL);
-        dispatch( getCurrentUser({ name,email, photoURL} ));
+      const { user : { displayName:name,email, photoURL, id } } = await signInWithPopup( firebaseAuth, provider);
       
       if(email){
-          const { data } = await axios.post(CHECK_USER_ROUTE, { email } );
+        const { data } = await axios.post(CHECK_USER_ROUTE, { email } );
+        const { id } = data?.data;
+        dispatch( getCurrentUser({ name,email, photoURL, id} ));
+        console.log(name,email,photoURL, id);
           
           if(!data.status){
             router.push("/signup");

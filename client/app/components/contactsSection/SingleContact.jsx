@@ -1,14 +1,14 @@
 import React from 'react';
 import avatar from "../../../public/avatar.png";
 import Image from 'next/image';
-import { getUser } from '@/redux/slice';
+import { getReceiverUser } from '@/redux/slice';
 import { useDispatch } from 'react-redux';
 
 const SingleContact = ({ contact }) => {
 
     const dispatch = useDispatch();
     const handleOpenChat = () => {
-        dispatch(getUser({...contact}));
+        dispatch(getReceiverUser({...contact}));
     }
   return (
     <>
