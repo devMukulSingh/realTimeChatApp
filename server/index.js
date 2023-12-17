@@ -37,7 +37,8 @@ io.on("connection", (socket) => {
         console.log(userId, socket.id);   
         onlineUsers.set(userId, socket.id);
     });
-    socket.on("send-msg", (data) => {
+    
+    socket.on("send-msg", (data) => {  //data contains {senderId,receiverId,messagetoBeSend} (coming from the frontend)
         console.log(data);
         console.log(onlineUsers); 
         const senderSocket = onlineUsers.get(data?.to);

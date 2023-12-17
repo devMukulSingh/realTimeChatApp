@@ -8,7 +8,7 @@ import { firebaseAuth } from '@/utils/firebase.config';
 import { CHECK_USER_ROUTE } from '@/utils/apiRoutes';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentUser, getMessages, getSocket } from '@/redux/slice';
+import { getCurrentUser, getSocketMessage, getSocket } from '@/redux/slice';
 import axios from 'axios';
 import ChatSection from '../components/chatSection/ChatSection';
 import { io } from "socket.io-client";
@@ -40,7 +40,7 @@ const page = () => {
     useEffect(() => {
       if(socket.current && !socketEvent){
         socket.current.on("msg-receive", (data) => {
-          dispatch(getMessages(data.message));
+          dispatch(getSocketMessage(data.message));
         })
         setSocketEvent(false);
       }

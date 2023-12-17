@@ -1,18 +1,19 @@
 import React from 'react';
-import avatar from "../../../public/avatar.png";
 import Image from 'next/image';
 import { getReceiverUser } from '@/redux/slice';
 import { useDispatch } from 'react-redux';
+///////////////////////////////////////
 
 const SingleContact = ({ contact }) => {
 
     const dispatch = useDispatch();
     const handleOpenChat = () => {
-        dispatch(getReceiverUser({...contact}));
+      dispatch(getReceiverUser({...contact}));
+     
     }
   return (
     <>
-     <main className='flex p-4 gap-4 items-center text-white w-full cursor-pointer hover:bg-[#2A3942] active:bg-[#2A3942] '
+      <main className='flex p-4 gap-4 items-center text-white w-full cursor-pointer hover:bg-[#2A3942] active:bg-[#2A3942] '
             onClick={ handleOpenChat }>
 
           <div>

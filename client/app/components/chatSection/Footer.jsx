@@ -21,7 +21,7 @@ const Footer = () => {
 
   const handleMessageSend = async(e) => {
     try {
-      const { data } = await axios.post(ADD_MESSAGE_ROUTE, { message:message, from:currentUser?.id, to:receiverUser?.id }  );
+      const { data } = await axios.post(ADD_MESSAGE_ROUTE, { message:message, from:currentUser?.id, to:receiverUser?.id , type:'sent'}  );
       //socket.emit is used to emit or send an event and data from the client to the server side
           socket.emit("send-msg", {
             from:currentUser?.id, 
