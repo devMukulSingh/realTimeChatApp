@@ -6,14 +6,15 @@ import {AiOutlinePlus} from "react-icons/ai";
 import {IoSendSharp } from "react-icons/io5";
 import { useSelector } from 'react-redux';
 import { ADD_MESSAGE_ROUTE } from "../../../utils/apiRoutes";
- 
-const Footer = () => {
-  const{ currentUser, receiverUser, socket } = useSelector( state => state.userSlice );
-  // console.log(currentUser);
-  // console.log(socket);
- 
+import EmojiPicker  from "emoji-picker-react";
+import { useEffect } from 'react';
+import { useRef } from 'react';
 
+ const Footer = () => {
+  const{ currentUser, receiverUser, socket } = useSelector( state => state.userSlice );
   const [message, setMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef(null);
 
   const handleMessageChange = (e) => {
       setMessage(e.target.value);
@@ -37,10 +38,36 @@ const Footer = () => {
   const keyMessageSend = (e) => {
     if(e.key === 'Enter') handleMessageSend();
   }
+
+  const handleEmojiPicker = () => {
+    setShowEmojiPicker(!showEmojiPicker);
+  }
+  const handleEmojiClick = (emoji) => {
+    setMessage( (prevMessage) => ( prevMessage += emoji.emoji));
+  }
+  useEffect( () => {
+    const handleOutsideEmojiClick = (e) => {
+      if(e.target.id !== 'emoji-open'){
+        if( emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)){
+          setShowEmojiPicker(false);
+        }
+      }
+    }
+    document.addEventListener( 'click' , handleOutsideEmojiClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideEmojiClick);
+    }
+  },[])
   return (
     <>
         <main className='flex w-full px-5 py-3 gap-4 items-center h-20 bg-[#202C33] absolute bottom-0'>
-          <BsEmojiLaughing className="text-3xl cursor-pointer text-white"/>
+          <BsEmojiLaughing className="text-3xl cursor-pointer text-white" onClick={ handleEmojiPicker } id='emoji-open'/>
+          {
+            showEmojiPicker && 
+            <div className='absolute left-0 bottom-20' ref={ emojiPickerRef}>
+                <EmojiPicker onEmojiClick={ handleEmojiClick } />
+            </div>
+          }
           <AiOutlinePlus className="text-3xl cursor-pointer text-white"/>
           <div className='bg-[#2A3942] w-11/12 h-12  rounded-xl flex gap-8 p-2'>
             <input type="text" placeholder='Type a message' value = {message} onChange={ handleMessageChange }

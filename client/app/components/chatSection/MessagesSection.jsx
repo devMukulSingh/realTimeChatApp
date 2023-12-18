@@ -13,32 +13,22 @@ const MessagesSection = () => {
   const{ receiverUser, currentUser, socket, socketMessage } = useSelector(state => state.userSlice);
   const scrollToEnd = useRef(null);
 
+  useEffect( () => {
+    scrollToEnd.current?.scrollIntoView( { behavior: 'smooth'});
+  },[socket]);
+
   useEffect(() => {
     getMessages();
   }, [receiverUser]);
   
-  useEffect( () => {
-    Scroll();
-  },[socket]);
-
   const getMessages = async() => {
     const { data } = await axios.post(GET_MESSAGES_ROUTE, { to:receiverUser?.id , from : currentUser?.id });
     setUserData(data);
   };
-
-  const Scroll = () => {
-    if (scrollToEnd.current) {
-      scrollToEnd.current.scrollTo({
-        top: scrollToEnd.current.scrollHeight,
-        behavior: 'smooth',
-      });
-    }
-  }
-
   
   return (
     
-      <main ref={scrollToEnd} className='w-full flex flex-col gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20' >
+      <main className='w-full flex flex-col gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20' >
           {  
               userData.length != 0 ?
               <>
@@ -56,6 +46,7 @@ const MessagesSection = () => {
                 No messages found
               </div>
           }
+          <div ref = {scrollToEnd} />
       </main>
   
   )
