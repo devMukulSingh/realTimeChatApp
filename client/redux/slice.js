@@ -9,6 +9,8 @@ const userSlice = createSlice({
         currentUser:{},
         socket:{},
         socketMessage:"",
+        openSearchMessage:false,
+        messages:[],
     },
     reducers:{
         getReceiverUser : ( state,action ) => {
@@ -24,9 +26,18 @@ const userSlice = createSlice({
 
         getSocketMessage : ( state,action ) => {
             state.socketMessage = action.payload;
+        },
+        getOpenSearchMessage : (state, action ) => {
+            state.openSearchMessage = action.payload;
+        },
+        getReceiverMessages : ( state,action ) => {
+            action.payload.map( (data) => {
+                state.messages.push(data.message)
+            })
         }
     }
 })
 
-export const{ getReceiverUser, getCurrentUser, getSocket, getSocketMessage } = userSlice.actions;
+export const{ getReceiverUser, getCurrentUser, getSocket, getSocketMessage, getOpenSearchMessage, getReceiverMessages } =
+ userSlice.actions;
 export default userSlice.reducer;

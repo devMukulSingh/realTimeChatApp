@@ -34,16 +34,12 @@ global.onlineUsers = new Map();
 io.on("connection", (socket) => {
     global.chatSocket = socket;
     socket.on("add-user", (userId) => {
-        console.log(userId, socket.id);   
         onlineUsers.set(userId, socket.id);
     });
     
     socket.on("send-msg", (data) => {  //data contains {senderId,receiverId,messagetoBeSend} (coming from the frontend)
-        console.log(data);
-        console.log(onlineUsers); 
         const senderSocket = onlineUsers.get(data?.to);
         if(senderSocket){
-            console.log('inside'); 
             socket.to(senderSocket).emit("msg-receive",{
                 from:data.from,
                 message:data.message,
@@ -52,6 +48,5 @@ io.on("connection", (socket) => {
     })
 });
 
-console.log(onlineUsers);
 
 

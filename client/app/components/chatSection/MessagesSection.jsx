@@ -2,33 +2,39 @@ import { GET_MESSAGES_ROUTE } from '@/utils/apiRoutes';
 import SingleMessage from './SingleMessage';
 import  axios  from 'axios';
 import React, { useEffect, useState} from 'react';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRef } from 'react';
-
+import { getReceiverUser, getOpenSearchMessage, getReceiverMessages } from '@/redux/slice';
+import MessagesSearchBar from "./MessagesSearchBar";
 ///////////////////////////////////////////////////////////////
 
 const MessagesSection = () => {
-
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState([]);
-  const{ receiverUser, currentUser, socket, socketMessage } = useSelector(state => state.userSlice);
+  const{ receiverUser, currentUser, socket, socketMessage, openSearchMessage } = useSelector(state => state.userSlice);
   const scrollToEnd = useRef(null);
-
+  // console.log(receiverUser);
   useEffect( () => {
     scrollToEnd.current?.scrollIntoView( { behavior: 'smooth'});
   },[socket]);
 
   useEffect(() => {
-    getMessages();
+    getMessages();  
   }, [receiverUser]);
-  
+
+
   const getMessages = async() => {
     const { data } = await axios.post(GET_MESSAGES_ROUTE, { to:receiverUser?.id , from : currentUser?.id });
     setUserData(data);
+    dispatch(getReceiverMessages(data));
+    
   };
+
   
   return (
     
-      <main className='w-full flex flex-col gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20' >
+      <main className={` ${openSearchMessage ? 'grid grid-cols-2' : {} } w-full gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20 `} >
+        <section className='flex flex-col gap-1'>
           {  
               userData.length != 0 ?
               <>
@@ -46,7 +52,14 @@ const MessagesSection = () => {
                 No messages found
               </div>
           }
-          <div ref = {scrollToEnd} />
+          </section>
+          {
+            openSearchMessage && 
+            <section className=''>
+                <MessagesSearchBar/>
+            </section>
+          }
+
       </main>
   
   )
