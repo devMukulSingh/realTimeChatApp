@@ -7,8 +7,7 @@ import { useDispatch } from 'react-redux';
 const SingleContact = ({ contact }) => {
   const dispatch = useDispatch();
   const handleOpenChat = () => {
-    dispatch(getReceiverUser({...contact}));
-     
+      dispatch(getReceiverUser({...contact}));
     }
   return (
     <>
