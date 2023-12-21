@@ -40,11 +40,13 @@ const userSlice = createSlice({
         },
         getSearchMessages : (state,action ) => {
             state.searchMessages = action.payload;
-        }
+        },
+ 
     }
 })
 
 export const{ getReceiverUser, getCurrentUser, getSocket, getSocketMessage, 
-      getOpenSearchMessage, getReceiverMessages,getSearchMessages } = userSlice.actions;
+      getOpenSearchMessage, getReceiverMessages,getSearchMessages,
+       } = userSlice.actions;
 
 export default userSlice.reducer;

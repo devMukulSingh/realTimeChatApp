@@ -4,7 +4,7 @@ import  axios  from 'axios';
 import React, { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useRef } from 'react';
-import { getReceiverUser, getOpenSearchMessage, getReceiverMessages, getSearchMessages } from '@/redux/slice';
+import { getReceiverUser, getOpenSearchMessage, getReceiverMessages, getSearchMessages } from '@/redux/userSlice';
 import SearchMessages from './SearchMessages';
 ///////////////////////////////////////////////////////////////
 

@@ -9,7 +9,7 @@ import { ADD_USER_ROUTE } from '@/utils/apiRoutes';
 import axios from 'axios';
 import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '@/utils/firebase.config';
-import { getUser } from '@/redux/slice';
+import { getUser } from '@/redux/userSlice';
 import { useRouter } from 'next/navigation';
 
 const page = () => {

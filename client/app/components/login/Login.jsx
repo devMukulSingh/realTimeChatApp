@@ -7,7 +7,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseAuth } from "../../../utils/firebase.config";
 import { CHECK_USER_ROUTE } from '@/utils/apiRoutes';
 import {  useRouter } from 'next/navigation';
-import { getCurrentUser } from '@/redux/slice';
+import { getCurrentUser } from '@/redux/userSlice';
 import { useDispatch } from 'react-redux';
 import logo from "../../../public/whatsapp.gif";
 

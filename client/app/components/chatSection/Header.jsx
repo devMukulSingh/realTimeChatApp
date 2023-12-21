@@ -3,18 +3,37 @@ import { useDispatch, useSelector } from 'react-redux';
 import React from 'react';
 import {ImSearch} from "react-icons/im";
 import {BsThreeDotsVertical} from "react-icons/bs";
-import { getOpenSearchMessage } from '@/redux/slice';
 import { IoMdClose } from 'react-icons/io';
+import { FaVideo } from "react-icons/fa";
+import { IoCallSharp } from "react-icons/io5";
+import { getOpenSearchMessage } from '@/redux/userSlice';
+import {  setVideoCall, setVoiceCall, setIncomingVoiceCall, setIncomingVideoCall } from '@/redux/callSlice';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const  { receiverUser, openSearchMessage }  = useSelector( state => state.userSlice );
+  const  { receiverUser, openSearchMessage, currentUser }  = useSelector( state => state.userSlice );
 
   const handleSearchBtn = () => {
     dispatch(getOpenSearchMessage(true));
   }
   const handleCloseSearchBtn = () => {
     dispatch(getOpenSearchMessage(false));
+  }
+  const handleVoiceCall = () => {
+    dispatch(setVoiceCall({
+      ...currentUser,
+      type: 'out-going',
+      callType:'voice',
+      roomId : Date.now()
+    }))
+  }
+  const handleVideoCall = () => {
+    dispatch(setVideoCall({
+      ...currentUser,
+      type: 'out-going',
+      callType:'video',
+      roomId : Date.now()
+    }))
   }
   
   return (
@@ -32,8 +51,11 @@ const Header = () => {
           </div>
 
           <div className='flex gap-8 items-center'>
-            <ImSearch className='text-xl cursor-pointer' onClick={ handleSearchBtn }/>
+            <IoCallSharp className='text-xl cursor-pointer' onClick={ handleVoiceCall }/>
+            <FaVideo className='text-xl cursor-pointer' onClick={ handleVideoCall }/>
+            <ImSearch className={` ${openSearchMessage ? 'hidden' : {}} text-xl cursor-pointer`} onClick={ handleSearchBtn }/>
             <BsThreeDotsVertical className='text-xl cursor-pointer'/>
+
 
           </div>
 
