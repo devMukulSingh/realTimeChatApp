@@ -3,34 +3,29 @@ import SingleMessage from './SingleMessage';
 import  axios  from 'axios';
 import React, { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { useRef } from 'react';
-import { getReceiverUser, getOpenSearchMessage, getReceiverMessages, getSearchMessages } from '@/redux/userSlice';
+import { setReceiverUser, setOpenSearchMessage, setReceiverMessages, setSearchMessages } from '@/redux/userSlice';
 import SearchMessages from './SearchMessages';
 ///////////////////////////////////////////////////////////////
 
 const MessagesSection = () => {
+
   const dispatch = useDispatch();
   const [userData, setUserData] = useState([]);
-  const{ receiverUser, currentUser, socket, socketMessage,
+  const{ receiverUser, currentUser, socketMessage,
      openSearchMessage } = useSelector(state => state.userSlice);
 
-  const scrollToEnd = useRef(null);
-
-  useEffect( () => {
-    scrollToEnd.current?.scrollIntoView( { behavior: 'smooth'});
-  },[socket]);
 
   useEffect(() => {
     getMessages();  
-    dispatch(getOpenSearchMessage(false));
-    dispatch(getSearchMessages([]));
+    dispatch(setOpenSearchMessage(false));
+    dispatch(setSearchMessages([]));
   }, [receiverUser]);
 
 
   const getMessages = async() => {
     const { data } = await axios.post(GET_MESSAGES_ROUTE, { to:receiverUser?.id , from : currentUser?.id });
     setUserData(data);
-    dispatch(getReceiverMessages(data));
+    dispatch(setReceiverMessages(data));
   };
 
   

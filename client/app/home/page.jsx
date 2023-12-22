@@ -8,7 +8,7 @@ import { firebaseAuth } from '@/utils/firebase.config';
 import { CHECK_USER_ROUTE } from '@/utils/apiRoutes';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentUser, getSocketMessage, getSocket } from '@/redux/userSlice';
+import { setCurrentUser, setSocketMessage, setSocket } from '@/redux/userSlice';
 import axios from 'axios';
 import ChatSection from '../components/chatSection/ChatSection';
 import { io } from "socket.io-client";
@@ -36,16 +36,16 @@ const page = () => {
       if(currentUser){
         socket.current = io(HOST);
         socket.current.emit("add-user", currentUser?.id);
-        dispatch(getSocket(socket.current));
+        dispatch(setSocket({...socket}));
       }
     },[currentUser, receiverUser]);
 
     useEffect(() => {
       if(socket.current && !socketEvent){
         socket.current.on("msg-receive", (data) => {
-          dispatch(getSocketMessage(data.message));
+          dispatch(setSocketMessage(data.message));
         })
-        setSocketEvent(false);
+        setSocketEvent(true);
       }
     },[socket.current]);
 
@@ -58,7 +58,7 @@ const page = () => {
             router.push("/");
           }
           const{ name, email, photoURL, id } = data?.data;
-          dispatch(getCurrentUser({ name,email,photoURL,id }));
+          dispatch(setCurrentUser({ name,email,photoURL,id }));
       }   
 
     })

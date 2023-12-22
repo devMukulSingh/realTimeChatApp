@@ -4,13 +4,15 @@ import axios from "axios";
 import {BsEmojiLaughing} from "react-icons/bs";
 import {AiOutlinePlus} from "react-icons/ai";
 import {IoSendSharp } from "react-icons/io5";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ADD_MESSAGE_ROUTE } from "../../../utils/apiRoutes";
 import EmojiPicker  from "emoji-picker-react";
 import { useEffect } from 'react';
 import { useRef } from 'react';
+import { setSocketMessage } from '@/redux/userSlice';
 
- const Footer = () => {
+  const Footer = () => {
+  const dispatch = useDispatch();
   const{ currentUser, receiverUser, socket } = useSelector( state => state.userSlice );
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -23,13 +25,16 @@ import { useRef } from 'react';
   const handleMessageSend = async(e) => {
     try {
       const { data } = await axios.post(ADD_MESSAGE_ROUTE, { message:message, from:currentUser?.id, to:receiverUser?.id , type:'sent'}  );
+      // console.log(socket);
       //socket.emit is used to emit or send an event and data from the client to the server side
-          socket.emit("send-msg", {
+      
+          socket.current.emit("send-msg", {
             from:currentUser?.id, 
             to:receiverUser?.id,
             message:data?.data?.message
           }) 
           
+          dispatch(setSocketMessage(data?.message));
           setMessage("");
         } catch (error) {
           console.log(`Error in handleMessageSend ${error}`);

@@ -9,7 +9,7 @@ import { ADD_USER_ROUTE } from '@/utils/apiRoutes';
 import axios from 'axios';
 import { onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '@/utils/firebase.config';
-import { getUser } from '@/redux/userSlice';
+import { setUser } from '@/redux/userSlice';
 import { useRouter } from 'next/navigation';
 
 const page = () => {
@@ -48,7 +48,7 @@ const page = () => {
       console.log( name,email,photoURL);
         setFirebaseUser({name,email,photoURL});
         console.log(firebaseUser);
-      // dispatch(getUser({ name, email, photoURL}));
+      // dispatch(setUser({ name, email, photoURL}));
     }
 })
 

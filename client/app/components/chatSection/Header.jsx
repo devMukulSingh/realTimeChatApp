@@ -6,18 +6,19 @@ import {BsThreeDotsVertical} from "react-icons/bs";
 import { IoMdClose } from 'react-icons/io';
 import { FaVideo } from "react-icons/fa";
 import { IoCallSharp } from "react-icons/io5";
-import { getOpenSearchMessage } from '@/redux/userSlice';
+import { setOpenSearchMessage } from '@/redux/userSlice';
 import {  setVideoCall, setVoiceCall, setIncomingVoiceCall, setIncomingVideoCall } from '@/redux/callSlice';
 
 const Header = () => {
+  
   const dispatch = useDispatch();
   const  { receiverUser, openSearchMessage, currentUser }  = useSelector( state => state.userSlice );
 
   const handleSearchBtn = () => {
-    dispatch(getOpenSearchMessage(true));
+    dispatch(setOpenSearchMessage(true));
   }
   const handleCloseSearchBtn = () => {
-    dispatch(getOpenSearchMessage(false));
+    dispatch(setOpenSearchMessage(false));
   }
   const handleVoiceCall = () => {
     dispatch(setVoiceCall({

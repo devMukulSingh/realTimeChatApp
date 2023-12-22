@@ -1,13 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
-import { getReceiverUser } from '@/redux/userSlice';
+import { setReceiverUser } from '@/redux/userSlice';
 import { useDispatch } from 'react-redux';
 ///////////////////////////////////////
 
 const SingleContact = ({ contact }) => {
   const dispatch = useDispatch();
   const handleOpenChat = () => {
-      dispatch(getReceiverUser({...contact}));
+      dispatch(setReceiverUser({...contact}));
     }
   return (
     <>

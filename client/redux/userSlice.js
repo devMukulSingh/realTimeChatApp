@@ -7,46 +7,46 @@ const userSlice = createSlice({
     initialState:{
         receiverUser:{},
         currentUser:{},
-        socket:{},
+        socket:undefined,
         socketMessage:"",
         openSearchMessage:false,
         messages:[],
         searchMessages:[],
     },
     reducers:{
-        getReceiverUser : ( state,action ) => {
+        setReceiverUser : ( state,action ) => {
             state.receiverUser = action.payload;
         },
-        getCurrentUser : ( state,action ) => {
+        setCurrentUser : ( state,action ) => {
             state.currentUser = action.payload;
         },
     
-        getSocket : ( state,action ) => {
+        setSocket : ( state,action ) => {
             state.socket = action.payload;
         },
 
-        getSocketMessage : ( state,action ) => {
+        setSocketMessage : ( state,action ) => {
             state.socketMessage = action.payload;
         },
-        getOpenSearchMessage : (state, action ) => {
+        setOpenSearchMessage : (state, action ) => {
             state.openSearchMessage = action.payload;
         },
-        getReceiverMessages : ( state,action ) => {
+        setReceiverMessages : ( state,action ) => {
             state.messages = [];
             action.payload.map( (data) => {
                 const { message, created } = data;
                 state.messages.push( {message , created} );
             })
         },
-        getSearchMessages : (state,action ) => {
+        setSearchMessages : (state,action ) => {
             state.searchMessages = action.payload;
         },
  
     }
 })
 
-export const{ getReceiverUser, getCurrentUser, getSocket, getSocketMessage, 
-      getOpenSearchMessage, getReceiverMessages,getSearchMessages,
+export const{ setReceiverUser, setCurrentUser, setSocket, setSocketMessage, 
+      setOpenSearchMessage, setReceiverMessages,setSearchMessages,
        } = userSlice.actions;
 
 export default userSlice.reducer;

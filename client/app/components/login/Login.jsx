@@ -7,7 +7,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { firebaseAuth } from "../../../utils/firebase.config";
 import { CHECK_USER_ROUTE } from '@/utils/apiRoutes';
 import {  useRouter } from 'next/navigation';
-import { getCurrentUser } from '@/redux/userSlice';
+import { setCurrentUser } from '@/redux/userSlice';
 import { useDispatch } from 'react-redux';
 import logo from "../../../public/whatsapp.gif";
 
@@ -24,7 +24,7 @@ const page = () => {
       if(email){
         const { data } = await axios.post(CHECK_USER_ROUTE, { email } );
         const { id } = data?.data;
-        dispatch( getCurrentUser({ name,email, photoURL, id} ));
+        dispatch( setCurrentUser({ name,email, photoURL, id} ));
         console.log(name,email,photoURL, id);
           
           if(!data.status){

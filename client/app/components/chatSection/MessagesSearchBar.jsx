@@ -1,4 +1,4 @@
-import { getSearchMessages } from '@/redux/userSlice';
+import { setSearchMessages } from '@/redux/userSlice';
 import React, { useState } from 'react';
 import {ImSearch} from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,10 +11,10 @@ const SearchBar = () => {
     const handleMessageSearch = (e) => {
         if(e.target.value){
           const searchMessage = messages.filter( msg => msg.message.includes(e.target.value) );
-          dispatch(getSearchMessages(searchMessage));
+          dispatch(setSearchMessages(searchMessage));
         }
         else{
-          dispatch(getSearchMessages([]));
+          dispatch(setSearchMessages([]));
         }
       
       }
