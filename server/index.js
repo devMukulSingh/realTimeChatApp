@@ -32,17 +32,26 @@ global.onlineUsers = new Map();
 // this events can be emmiited using socket.emit method
 
 io.on("connection", (socket) => {
+    
     global.chatSocket = socket;
+
     socket.on("add-user", (userId) => {
-        onlineUsers.set(userId, socket.id);
+        if(userId){
+            onlineUsers.set(userId, socket.id);
+            console.log(onlineUsers);
+        }
     });
     
     socket.on("send-msg", (data) => {  //data contains {senderId,receiverId,messagetoBeSend} (coming from the frontend)
-        const senderSocket = onlineUsers.get(data?.to);
+        console.log(data);
+        const senderSocket = onlineUsers.get(data.to);
+        console.log(onlineUsers);
         if(senderSocket){
+            console.log('inside');
             socket.to(senderSocket).emit("msg-receive",{
-                from:data.from,
+                senderId:data.from,
                 message:data.message,
+                created:data.created
             }) 
         } 
     })

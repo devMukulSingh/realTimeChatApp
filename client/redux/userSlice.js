@@ -26,16 +26,18 @@ const userSlice = createSlice({
         },
 
         setSocketMessage : ( state,action ) => {
-            state.socketMessage = action.payload;
+                const messages = state.messages;
+                state.messages = [ ...messages, action.payload ];
+                console.log(state.messages);
         },
         setOpenSearchMessage : (state, action ) => {
             state.openSearchMessage = action.payload;
         },
-        setReceiverMessages : ( state,action ) => {
+        setMessages : ( state,action ) => {
             state.messages = [];
             action.payload.map( (data) => {
-                const { message, created } = data;
-                state.messages.push( {message , created} );
+                const { message, created, senderId } = data;
+                state.messages.push( {message , created, senderId} );
             })
         },
         setSearchMessages : (state,action ) => {
@@ -46,7 +48,7 @@ const userSlice = createSlice({
 })
 
 export const{ setReceiverUser, setCurrentUser, setSocket, setSocketMessage, 
-      setOpenSearchMessage, setReceiverMessages,setSearchMessages,
+      setOpenSearchMessage, setMessages,setSearchMessages,
        } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -34,19 +34,20 @@ const page = () => {
     
     useEffect( () => {
       if(currentUser){
-        socket.current = io(HOST);
+        socket.current = io("http://localhost:8000");
         socket.current.emit("add-user", currentUser?.id);
         dispatch(setSocket({...socket}));
       }
-    },[currentUser, receiverUser]);
-
+    },[currentUser,receiverUser]);
     useEffect(() => {
-      if(socket.current && !socketEvent){
+      if(socket.current){
         socket.current.on("msg-receive", (data) => {
-          dispatch(setSocketMessage(data.message));
+          console.log(socket);
+          console.log(data);
+          dispatch(setSocketMessage(data));
         })
-        setSocketEvent(true);
       }
+      setSocketEvent(true);
     },[socket.current]);
 
     onAuthStateChanged( firebaseAuth, async(firebaseUser) => {

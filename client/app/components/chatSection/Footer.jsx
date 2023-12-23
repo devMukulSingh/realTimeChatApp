@@ -30,11 +30,10 @@ import { setSocketMessage } from '@/redux/userSlice';
       
           socket.current.emit("send-msg", {
             from:currentUser?.id, 
-            to:receiverUser?.id,
-            message:data?.data?.message
+            message:data?.data?.message,
+            created: Date.now()
           }) 
-          
-          dispatch(setSocketMessage(data?.message));
+          dispatch(setSocketMessage(data));
           setMessage("");
         } catch (error) {
           console.log(`Error in handleMessageSend ${error}`);

@@ -13,7 +13,7 @@ try {
                      message:message,
                      sender: { connect : { id:from }} ,
                      receiver: { connect : { id: to }} ,
-                     messageStatus:" "
+                     messageStatus:" ",
                  }
              })
              return res.json({ status:201, data:messages })

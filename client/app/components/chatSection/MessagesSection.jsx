@@ -3,7 +3,7 @@ import SingleMessage from './SingleMessage';
 import  axios  from 'axios';
 import React, { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { setReceiverUser, setOpenSearchMessage, setReceiverMessages, setSearchMessages } from '@/redux/userSlice';
+import {  setOpenSearchMessage, setMessages, setSearchMessages } from '@/redux/userSlice';
 import SearchMessages from './SearchMessages';
 ///////////////////////////////////////////////////////////////
 
@@ -11,9 +11,11 @@ const MessagesSection = () => {
 
   const dispatch = useDispatch();
   const [userData, setUserData] = useState([]);
-  const{ receiverUser, currentUser, socketMessage,
+  const{ receiverUser, currentUser, messages,
      openSearchMessage } = useSelector(state => state.userSlice);
+    //  console.log(messages);
 
+ 
 
   useEffect(() => {
     getMessages();  
@@ -24,8 +26,8 @@ const MessagesSection = () => {
 
   const getMessages = async() => {
     const { data } = await axios.post(GET_MESSAGES_ROUTE, { to:receiverUser?.id , from : currentUser?.id });
-    setUserData(data);
-    dispatch(setReceiverMessages(data));
+    // setUserData(data);
+    dispatch(setMessages(data));
   };
 
   
@@ -36,16 +38,17 @@ const MessagesSection = () => {
         
         <section className='flex flex-col gap-1'>
           {  
-              userData.length != 0 ?
+              messages.length != 0 ?
               <>
                 {
-                  userData?.map( (currUser,index) => {
+                  messages && messages?.map( (currUser,index) => {
+
                     return (
                       <SingleMessage currUser = {currUser} key={index}/>
                       )
                     })
                   }
-                  { socketMessage && socketMessage }
+                  {/* { socketMessage && socketMessage } */}
                 </>
               :
               <div className='text-white'>
