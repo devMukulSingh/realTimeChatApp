@@ -9,7 +9,7 @@ const SearchMessages = () => {
 
   return (
     <>
-        <main className=' flex flex-col gap-5'>
+        <main className=' flex flex-col gap-5 fixed'>
                 <MessagesSearchBar/>
                 <div className='flex flex-col gap-2'>
                     {

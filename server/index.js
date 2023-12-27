@@ -25,8 +25,8 @@ const io = new Server(server, {
         origin: "http://localhost:3000"
     }
 });
-// map data structure of name onlineUsers(global object)
-global.onlineUsers = new Map();
+
+global.onlineUsers = new Map(); // map data structure of name onlineUsers(global object)
 
 //socket.on used to listen to events emmitted either from the client or the server side. it can be used on both side
 // this events can be emmiited using socket.emit method
@@ -38,16 +38,17 @@ io.on("connection", (socket) => {
     socket.on("add-user", (userId) => {
         if(userId){
             onlineUsers.set(userId, socket.id);
-            console.log(onlineUsers);
+            // console.log(onlineUsers);
         }
     });
     
     socket.on("send-msg", (data) => {  //data contains {senderId,receiverId,messagetoBeSend} (coming from the frontend)
-        console.log(data);
-        const senderSocket = onlineUsers.get(data.to);
-        console.log(onlineUsers);
+        // console.log(data);
+        const senderSocket = onlineUsers.get(data?.to);
+        // console.log(onlineUsers);
+
         if(senderSocket){
-            console.log('inside');
+            // console.log('inside');
             socket.to(senderSocket).emit("msg-receive",{
                 senderId:data.from,
                 message:data.message,
@@ -55,6 +56,30 @@ io.on("connection", (socket) => {
             }) 
         } 
     })
+
+    socket.on("outgoing-voice-call", (data) => {
+        const senderSocket = onlineUsers.get(data.to);
+        if(senderSocket){
+            socket.to(senderSocket).emit("incoming-voice-call",{
+                from:data.from,
+                roomId: data.roomId,
+                callType:data.callType
+
+            })
+        }
+    })
+
+    socket.on("outgoing-video-call", (data) => {
+        const senderSocket = onlineUsers.get(data.to);
+        if(senderSocket){
+            socket.emit("incoming-video-call", {
+                from:data.to,
+                roomId: data.roomId,
+                callType:data.callType
+            })
+        }
+    })
+
 });
 
 

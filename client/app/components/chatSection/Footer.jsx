@@ -29,11 +29,12 @@ import { setSocketMessage } from '@/redux/userSlice';
       //socket.emit is used to emit or send an event and data from the client to the server side
       
           socket.current.emit("send-msg", {
-            from:currentUser?.id, 
+            from:currentUser?.id,
+            to:receiverUser?.id, 
             message:data?.data?.message,
             created: Date.now()
           }) 
-          dispatch(setSocketMessage(data));
+          dispatch(setSocketMessage(data?.data));
           setMessage("");
         } catch (error) {
           console.log(`Error in handleMessageSend ${error}`);

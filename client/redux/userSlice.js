@@ -8,7 +8,6 @@ const userSlice = createSlice({
         receiverUser:{},
         currentUser:{},
         socket:undefined,
-        socketMessage:"",
         openSearchMessage:false,
         messages:[],
         searchMessages:[],
@@ -26,9 +25,9 @@ const userSlice = createSlice({
         },
 
         setSocketMessage : ( state,action ) => {
-                const messages = state.messages;
-                state.messages = [ ...messages, action.payload ];
-                console.log(state.messages);
+            const{ senderId, message , created } = action.payload;
+            state.messages = [ ...state.messages, { senderId, message, created} ];
+            console.log(state.messages);
         },
         setOpenSearchMessage : (state, action ) => {
             state.openSearchMessage = action.payload;

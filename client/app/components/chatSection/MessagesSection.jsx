@@ -48,7 +48,6 @@ const MessagesSection = () => {
                       )
                     })
                   }
-                  {/* { socketMessage && socketMessage } */}
                 </>
               :
               <div className='text-white'>

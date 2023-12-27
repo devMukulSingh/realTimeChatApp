@@ -25,7 +25,7 @@ const page = () => {
     const [redirectLogin, setRedirectLogin] = useState(false);
     const socket = useRef(null);
     const [socketEvent, setSocketEvent] = useState(false);
-    const { currentUser,receiverUser } = useSelector( state => state.userSlice );
+    const { currentUser,receiverUser, } = useSelector( state => state.userSlice );
     const { voiceCall, videoCall } = useSelector( state => state.callSlice);
 
     useEffect( () => {
@@ -38,7 +38,7 @@ const page = () => {
         socket.current.emit("add-user", currentUser?.id);
         dispatch(setSocket({...socket}));
       }
-    },[currentUser,receiverUser]);
+    },[currentUser, receiverUser, socket]);
     useEffect(() => {
       if(socket.current){
         socket.current.on("msg-receive", (data) => {
