@@ -58,8 +58,10 @@ io.on("connection", (socket) => {
     })
 
     socket.on("outgoing-voice-call", (data) => {
+        console.log(data);
         const senderSocket = onlineUsers.get(data.to);
         if(senderSocket){
+            console.log('in');
             socket.to(senderSocket).emit("incoming-voice-call",{
                 from:data.from,
                 roomId: data.roomId,
@@ -73,10 +75,29 @@ io.on("connection", (socket) => {
         const senderSocket = onlineUsers.get(data.to);
         if(senderSocket){
             socket.emit("incoming-video-call", {
-                from:data.to,
+                from:data.from,
                 roomId: data.roomId,
                 callType:data.callType
             })
+        }
+    })
+
+    socket.on("reject-voice-call", (data) => {
+        const senderSocket = onlineUsers.get(data.to);
+        if(senderSocket){
+            socket.to(senderSocket).emit("voice-call-rejected");
+        }
+    })
+    socket.on("reject-video-call",(data) => {
+        const senderSocket = onlineUsers.get(data.to);
+        if(senderSocket){
+            socket.to(senderSocket).emit("video-call-rejected");
+        }
+    })
+    socket.on("accept-incoming-call", (data) => {
+        const senderSocket = onlineUsers.get(data.to);
+        if(senderSocket){
+            socket.to(senderSocket).emit("accept-call",data);
         }
     })
 

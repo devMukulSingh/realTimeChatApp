@@ -22,7 +22,7 @@ const Header = () => {
   }
   const handleVoiceCall = () => {
     dispatch(setVoiceCall({
-      ...currentUser,
+      ...receiverUser,
       type: 'out-going',
       callType:'voice',
       roomId : Date.now()
@@ -30,7 +30,7 @@ const Header = () => {
   }
   const handleVideoCall = () => {
     dispatch(setVideoCall({
-      ...currentUser,
+      ...receiverUser,
       type: 'out-going',
       callType:'video',
       roomId : Date.now()

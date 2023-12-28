@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const videoCall = () => {
     const dispatch = useDispatch();
-    const { receiverUser, socket } = useSelector( state => state.userSlice);
+    const { currentUser,receiverUser, socket } = useSelector( state => state.userSlice);
     const { videoCall, incoming } = useSelector( state => state.callSlice );
 
     const handleEndCall = () => {
@@ -16,13 +16,15 @@ const videoCall = () => {
 
     useEffect(( ) => {
       if(videoCall.type==="out-going"){
-        socket.emit("outgoing-video-call",{
-          to:video.id,
+        socket.current.emit("outgoing-video-call",{
+          to:videoCall.id,
           from:{
             id:currentUser.id,
             name:currentUser.name,
             profilePicture: currentUser.photoURL
-          }
+          },
+          callType:videoCall.callType,
+          roomId: videoCall.roomId
 
 
         })
@@ -35,7 +37,6 @@ const videoCall = () => {
         <Image src = {receiverUser?.photoURL} width={250} height={250} className='rounded-full' alt='profile'/>
         <h1 className='text-4xl'> {receiverUser?.name} </h1>
         { 
-       
            <h1 className='text-xl'> Calling... </h1>
         }
         <MdCallEnd className='rounded-full text-5xl text-[red] cursor-pointer'

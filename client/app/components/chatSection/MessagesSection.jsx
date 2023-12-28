@@ -13,6 +13,7 @@ const MessagesSection = () => {
   const [userData, setUserData] = useState([]);
   const{ receiverUser, currentUser, messages,
      openSearchMessage } = useSelector(state => state.userSlice);
+  
     //  console.log(messages);
 
  
@@ -34,7 +35,7 @@ const MessagesSection = () => {
   return (
     
       <main className={` ${openSearchMessage ? 'grid grid-cols-2' : {} } 
-      w-full gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20 `} >
+        w-full gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20 `} >
         
         <section className='flex flex-col gap-1'>
           {  

@@ -15,6 +15,9 @@ import { io } from "socket.io-client";
 import { HOST } from '@/utils/apiRoutes';
 import  VideoCall from "../components/call/VideoCall";
 import VoiceCall  from "../components/call/VoiceCall";
+import { setEndCall, setIncomingVideoCall, setIncomingVoiceCall } from '@/redux/callSlice';
+import IncomingVideoCallComp from '../components/call/IncomingVideoCallComp';
+import IncomingVoiceCallComp from '../components/call/IncomingVoiceCallComp';
 
 ///////////////////////////////////////////////
 
@@ -26,7 +29,7 @@ const page = () => {
     const socket = useRef(null);
     const [socketEvent, setSocketEvent] = useState(false);
     const { currentUser,receiverUser, } = useSelector( state => state.userSlice );
-    const { voiceCall, videoCall } = useSelector( state => state.callSlice);
+    const { voiceCall, videoCall, incomingVideoCall, incomingVoiceCall } = useSelector( state => state.callSlice);
 
     useEffect( () => {
       if(redirectLogin) router.push("/");
@@ -47,7 +50,29 @@ const page = () => {
           dispatch(setSocketMessage(data));
         })
       }
-      setSocketEvent(true);
+
+      socket.current.on("incoming-voice-call",(data) => {
+        console.log(data);
+        dispatch(setIncomingVoiceCall(data));
+      })
+    
+      socket.current.on("incoming-video-call",(data) => {
+        dispatch(setIncomingVideoCall(data));
+      })
+
+      socket.current.on("voice-call-rejected",() => {
+        dispatch(setEndCall());
+      })
+
+      socket.current.on("video-call-rejected",() => {
+        dispatch(setEndCall());
+      })
+
+      socket.current.on("accept-call",() => {
+
+      })
+
+
     },[socket.current]);
 
     onAuthStateChanged( firebaseAuth, async(firebaseUser) => {
@@ -65,7 +90,8 @@ const page = () => {
     })
 
   return (
-      <>
+    <>
+      
         {
             (voiceCall||videoCall) ?
             <main className='h-screen w-screen max-h-screen bg-[#0C1317]'>
@@ -76,24 +102,27 @@ const page = () => {
             </main>
           
           :
-          
-        <main className='h-screen w-screen max-h-screen bg-[#0C1317] flex p-5'>
+          <>
+              {incomingVoiceCall && <IncomingVoiceCallComp/>}
+              {incomingVideoCall && <IncomingVideoCallComp/> }  
+              
+              <main className='h-screen w-screen max-h-screen bg-[#0C1317] flex p-5'>
+                  <div className='basis-1/3'>
+                    <Contacts/>
+                  </div>
+                {
+                  Object.keys(receiverUser)?.length===0 ?
+                    <div className='flex items-center justify-center bg-[#202C33] basis-3/4'>
+                        <Image src={logo} alt="logo" width={400} />
+                    </div> 
+                      :
+                      <div className='flex bg-[#202C33] basis-3/4 w-full'>
+                        <ChatSection/>
+                      </div>  
+                  }
 
-              <div className='basis-1/3'>
-                <Contacts/>
-              </div>
-            {
-              Object.keys(receiverUser)?.length===0 ?
-                <div className='flex items-center justify-center bg-[#202C33] basis-3/4'>
-                    <Image src={logo} alt="logo" width={400} />
-                </div> 
-                  :
-                  <div className='flex bg-[#202C33] basis-3/4 w-full'>
-                    <ChatSection/>
-                  </div>  
-              }
-
-        </main> 
+            </main> 
+        </>
       }
   
     </>

@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 const voiceCall = () => {
     const dispatch = useDispatch();
-    const { socket, currentUser } = useSelector( state => state.userSlice);
+    const { socket, currentUser, receiverUser } = useSelector( state => state.userSlice);
     const { voiceCall, incoming } = useSelector( state => state.callSlice );
 
     const handleEndCall = () => {
@@ -16,7 +16,7 @@ const voiceCall = () => {
 
     useEffect(() => {
       if(voiceCall.type==="out-going"){
-        socket.emit("outgoing-voice-call", {
+        socket.current.emit("outgoing-voice-call", {
           to: voiceCall.id,
           from:{
             id:currentUser.id,
