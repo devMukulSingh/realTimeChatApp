@@ -58,10 +58,10 @@ io.on("connection", (socket) => {
     })
 
     socket.on("outgoing-voice-call", (data) => {
-        console.log(data);
+        // console.log(data);
         const senderSocket = onlineUsers.get(data.to);
         if(senderSocket){
-            console.log('in');
+            // console.log('in');
             socket.to(senderSocket).emit("incoming-voice-call",{
                 from:data.from,
                 roomId: data.roomId,
@@ -73,6 +73,7 @@ io.on("connection", (socket) => {
 
     socket.on("outgoing-video-call", (data) => {
         const senderSocket = onlineUsers.get(data.to);
+        console.log(data);
         if(senderSocket){
             socket.emit("incoming-video-call", {
                 from:data.from,

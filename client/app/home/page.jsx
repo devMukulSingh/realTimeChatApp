@@ -57,6 +57,7 @@ const page = () => {
       })
     
       socket.current.on("incoming-video-call",(data) => {
+        console.log(data);
         dispatch(setIncomingVideoCall(data));
       })
 
@@ -78,12 +79,12 @@ const page = () => {
     onAuthStateChanged( firebaseAuth, async(firebaseUser) => {
 
         if( !firebaseUser) setRedirectLogin(true);
-        if( Object.keys(currentUser).length === 0 && firebaseUser?.email ){
-          const { data } = await axios.post( CHECK_USER_ROUTE, { email: firebaseUser?.email } );
-          if(!data?.status){
+        if( Object.keys(currentUser).length === 0 && firebaseUser.email ){
+          const { data } = await axios.post( CHECK_USER_ROUTE, { email: firebaseUser.email } );
+          if(!data.status){
             router.push("/");
           }
-          const{ name, email, photoURL, id } = data?.data;
+          const{ name, email, photoURL, id } = data.data;
           dispatch(setCurrentUser({ name,email,photoURL,id }));
       }   
 
@@ -111,7 +112,7 @@ const page = () => {
                     <Contacts/>
                   </div>
                 {
-                  Object.keys(receiverUser)?.length===0 ?
+                  Object.keys(receiverUser).length===0 ?
                     <div className='flex items-center justify-center bg-[#202C33] basis-3/4'>
                         <Image src={logo} alt="logo" width={400} />
                     </div> 

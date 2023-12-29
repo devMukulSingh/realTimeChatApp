@@ -8,11 +8,14 @@ import { useEffect } from 'react';
 const voiceCall = () => {
     const dispatch = useDispatch();
     const { socket, currentUser, receiverUser } = useSelector( state => state.userSlice);
-    const { voiceCall, incoming } = useSelector( state => state.callSlice );
+    const { voiceCall, incomingVoiceCall } = useSelector( state => state.callSlice );
 
     const handleEndCall = () => {
       dispatch(setEndCall("endcall"));
-    }
+      socket.current.emit("reject-voice-call",{
+          to:voiceCall.id
+      })
+    } 
 
     useEffect(() => {
       if(voiceCall.type==="out-going"){
@@ -32,8 +35,8 @@ const voiceCall = () => {
 
   return (
     <main className='h-screen w-screen flex flex-col items-center justify-center text-white gap-4'>
-        <Image src = {receiverUser?.photoURL} width={250} height={250} className='rounded-full' alt='profile'/>
-        <h1 className='text-4xl'> {receiverUser?.name} </h1>
+        <Image src = {receiverUser.photoURL} width={250} height={250} className='rounded-full' alt='profile'/>
+        <h1 className='text-4xl'> {receiverUser.name} </h1>
         { 
        
            <h1 className='text-xl'> Calling... </h1>
