@@ -1,13 +1,63 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 import { setEndCall, setIncomingVoiceCall, setVoiceCall } from '@/redux/callSlice';
+import { useEffect } from 'react';
+import { GET_CALL_TOKEN } from '@/utils/apiRoutes';
+import axios from "axios";
 
 const IncomingVoiceCallComp = () => {
 
   const dispatch = useDispatch();
   const{ incomingVoiceCall } = useSelector( state => state.callSlice);
-  const{ socket } = useSelector( state => state.userSlice );
+  const{ socket, currentUser } = useSelector( state => state.userSlice );
+  const [callAccepted, setCallAccepted] = useState(false);
+  const [token, setToken] = useState(null);
+  const [zegVar, setZegVar] = useState(null);
+
+  useEffect(() => {
+    if(incomingVoiceCall.type==="out-going"){
+      socket.current.on("accept-call" , () =>  setCallAccepted(true));
+    }
+    else{
+      setTimeout( () => {
+        setCallAccepted(true);
+      },1000)
+    }
+  },[incomingVoiceCall]);
+
+  useEffect(( ) => {
+    const getToken = async() => {
+        try {
+            const { data: { token : returnedToken } } = await axios.get(`${GET_CALL_TOKEN}/${currentUser.id}`);
+            setToken(returnedToken);
+      }    
+        catch (error) {
+          console.log(error);
+      }
+    } 
+  },[callAccepted]);
+
+  useEffect( () => {
+    const startCall = async() => {
+     import("zego-express-engine-webrtc").then( async({ZegoExpressEngine}) => {
+      const zg = new ZegoExpressEngine(process.env.NEXT_PUBLIC_ZEGO_APP_ID, process.env.NEXT_PUBLIC_SERVER_ID);
+      setZegVar(zg);
+     }) 
+     zg.on("roomStreamUpdate", 
+          async(roomId, updateType, streamList, extendedData) => {
+            if(updateType==="ADD"){
+
+            }
+            else if(updateType==="DELETE" && zg && localStream && streamList[0].streamID){
+              zg.destroyStream(localStream);
+              zg.stopPubliishingStream(streamList[0].streamID);
+              zg.logoutRoom(incomingVoiceCall.roomId.toString());
+              dispatch(setEndCall());
+            }
+          })
+    }
+  },[token]);
 
   const handleRejectCall = () => {
       dispatch(setEndCall());
@@ -25,7 +75,7 @@ const IncomingVoiceCallComp = () => {
     });
 
     dispatch(setIncomingVoiceCall({
-      incomingVoiceCall:undefined
+      incomingVoiceCall:undefined,
     }));
     
   }

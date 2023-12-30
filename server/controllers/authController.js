@@ -1,4 +1,5 @@
 import getprismaInstance from "../utils/prismaClient.js";
+import  generateToken04 from "../utils/generateToken04.js";
   
 export const checkUserController = async(req,res,next) => {
    try {
@@ -56,4 +57,31 @@ try {
 } catch (error) {
       next(error)
 }
+}
+
+export const generateTokenController = async(req,res,next) =>{
+  try {
+    const appId = process.env.NEXT_PUBLIC_ZEGO_APP_ID;
+    const serverSecret = process.env.NEXT_PUBLIC_ZEGO_SERVER_ID;
+    const userId = req.params.userId;
+    const payload = "";
+    const effectiveTime = 3600;
+ 
+    if(appId && serverSecret && userId ){
+       const token = generateToken04(
+          appId,
+          serverSecret,
+          userId,
+          payload,
+          effectiveTime
+       );
+ 
+       return res.status(201).json({ token });
+ 
+    }
+    return res.status(400).send('appId, serverSecret and userId required');
+  } catch (error) {
+      next(error);
+  }
+
 }
