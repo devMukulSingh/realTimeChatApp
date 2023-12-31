@@ -61,8 +61,8 @@ try {
 
 export const generateTokenController = async(req,res,next) =>{
   try {
-    const appId = process.env.NEXT_PUBLIC_ZEGO_APP_ID;
-    const serverSecret = process.env.NEXT_PUBLIC_ZEGO_SERVER_ID;
+    const appId = parseInt(process.env.ZEGO_APP_ID);
+    const serverSecret = process.env.ZEGO_SERVER_ID;
     const userId = req.params.userId;
     const payload = "";
     const effectiveTime = 3600;
@@ -75,9 +75,7 @@ export const generateTokenController = async(req,res,next) =>{
           payload,
           effectiveTime
        );
- 
-       return res.status(201).json({ token });
- 
+       return res.status(201).json(token);
     }
     return res.status(400).send('appId, serverSecret and userId required');
   } catch (error) {
