@@ -25,11 +25,11 @@ try {
 
 }
 
-export const getMessageController = async(req,res,next) => {
+export const getMessageController = async(req,res,next) => { 
     try {
-        const { to, from } = req.body;
+        const{ to,from } = req.query;
         if( !to || !from ){
-            return res.status(300).json('To and From not found');
+            return res.status(300).json("To and from not found");
         }
         const prisma = getprismaInstance();
         const messages = await prisma.messages.findMany({

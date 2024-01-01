@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {  setOpenSearchMessage, setMessages, setSearchMessages } from '@/redux/userSlice';
 import SearchMessages from './SearchMessages';
 import { useRef } from 'react';
+import { QueryClient, useQuery } from "@tanstack/react-query"
 ///////////////////////////////////////////////////////////////
 
 const MessagesSection = () => {
@@ -13,25 +14,38 @@ const MessagesSection = () => {
   const dispatch = useDispatch();
   const [userData, setUserData] = useState([]);
   const{ receiverUser, currentUser, messages,
-     openSearchMessage } = useSelector(state => state.userSlice);
-     const componentRef = useRef();
-   
+        openSearchMessage } = useSelector(state => state.userSlice);
+  const componentRef = useRef();
+    
+  useEffect( () => {
+    // refetch();
+  },[receiverUser,messages])
 
   useEffect(() => {
-    getMessages();  
     dispatch(setOpenSearchMessage(false));
     dispatch(setSearchMessages([]));
   }, [receiverUser]);
-
+  
   useEffect( () => {
       const componentHeight = componentRef.current.scrollHeight;
       componentRef.current.scrollTo(0,componentHeight);
-  },[messages,receiverUser])
+    },[messages,receiverUser])
+    
+    const getMessages = async() => {
+      const { data }  = await axios.get(GET_MESSAGES_ROUTE, 
+        { params :{to :receiverUser?.id , from : currentUser?.id} });
+        return data;
+      };
+      const{ isLoading, data:queryMessages, isError,error, isSuccess, refetch} = useQuery( 
+        { queryFn : getMessages, 
+          queryKey: ['getMessages'],    
+          enabled : false,
+          staleTime:10000,
+          });    
+      if(isSuccess) dispatch(setMessages(queryMessages));
+      if(isError) console.log(error.message);
 
-  const getMessages = async() => {
-    const { data } = await axios.post(GET_MESSAGES_ROUTE, { to:receiverUser?.id , from : currentUser?.id });
-    dispatch(setMessages(data));
-  };
+      
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   return (
     
