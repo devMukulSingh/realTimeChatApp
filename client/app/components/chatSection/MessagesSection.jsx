@@ -6,25 +6,26 @@ import { useDispatch, useSelector } from "react-redux";
 import {  setOpenSearchMessage, setMessages, setSearchMessages } from '@/redux/userSlice';
 import SearchMessages from './SearchMessages';
 import { useRef } from 'react';
-import { QueryClient, useQuery } from "@tanstack/react-query"
+import { useQueryClient, useQuery } from "@tanstack/react-query"
 ///////////////////////////////////////////////////////////////
 
 const MessagesSection = () => {
 
   const dispatch = useDispatch();
-  const [userData, setUserData] = useState([]);
   const{ receiverUser, currentUser, messages,
         openSearchMessage } = useSelector(state => state.userSlice);
   const componentRef = useRef();
-    
+  const queryClient = useQueryClient();
+
   useEffect( () => {
-    // refetch();
-  },[receiverUser,messages])
+    getMessages();
+    // queryClient.invalidateQueries(['getMessages', receiverUser]);
+  },[receiverUser])
 
   useEffect(() => {
     dispatch(setOpenSearchMessage(false));
     dispatch(setSearchMessages([]));
-  }, [receiverUser]);
+  }, [receiverUser,messages]);
   
   useEffect( () => {
       const componentHeight = componentRef.current.scrollHeight;
@@ -34,16 +35,15 @@ const MessagesSection = () => {
     const getMessages = async() => {
       const { data }  = await axios.get(GET_MESSAGES_ROUTE, 
         { params :{to :receiverUser?.id , from : currentUser?.id} });
-        return data;
+        // return data;
+        dispatch(setMessages(data));
       };
-      const{ isLoading, data:queryMessages, isError,error, isSuccess, refetch} = useQuery( 
-        { queryFn : getMessages, 
-          queryKey: ['getMessages'],    
-          enabled : false,
-          staleTime:10000,
-          });    
-      if(isSuccess) dispatch(setMessages(queryMessages));
-      if(isError) console.log(error.message);
+
+      // const{ isLoading, data:queryMessages, isError,error} = useQuery( 
+      //   { queryFn : getMessages, 
+      //     queryKey: ['getMessages',receiverUser],    
+      //     });    
+      // if(isError) console.log(error.message);
 
       
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,8 @@ const MessagesSection = () => {
         
         <section className='flex flex-col gap-1'>
           {  
-              messages.length != 0 ?
+              // !isLoading && queryMessages?.length != 0 ?
+              messages?.length != 0 ?
               <>
                 {
                   messages && messages?.map( (currUser,index) => {

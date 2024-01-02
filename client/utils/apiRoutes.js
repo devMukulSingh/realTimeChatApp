@@ -1,4 +1,5 @@
 export const HOST = "http://localhost:8000";
+// export const HOST = "https://chatappserver-4j90.onrender.com"
 
 const AUTH_ROUTE = `${HOST}/api/auth`;
 const MESSAGE_ROUTE = `${HOST}/api/message`;

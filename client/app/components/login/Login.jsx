@@ -11,7 +11,7 @@ import { setCurrentUser } from '@/redux/userSlice';
 import { useDispatch } from 'react-redux';
 import logo from "../../../public/whatsapp.gif";
 
-const page = () => {
+const Login = () => {
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const page = () => {
   return (
     <main className='h-screen w-screen flex flex-col bg-[#202C33] text-white items-center justify-center gap-10'>
 
-      <div className=''>
+      <div className='' id='context-opener'>
         <Image src={logo} alt="logo" width={300} height={300}/>
       </div>
 
@@ -58,4 +58,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Login

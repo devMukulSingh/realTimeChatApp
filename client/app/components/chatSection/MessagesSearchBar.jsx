@@ -8,6 +8,7 @@ const SearchBar = () => {
     const{ receiverUser, messages } = useSelector( state => state.userSlice );
     const dispatch = useDispatch();
 
+
     const handleMessageSearch = (e) => {
         if(e.target.value){
           const searchMessage = messages.filter( msg => msg.message.includes(e.target.value) );

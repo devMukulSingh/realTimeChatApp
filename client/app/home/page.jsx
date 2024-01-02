@@ -21,7 +21,7 @@ import IncomingVoiceCallComp from '../components/call/IncomingVoiceCallComp';
 
 ///////////////////////////////////////////////
 
-const page = () => {
+const Page = () => {
 
     const router = useRouter();
     const dispatch = useDispatch();
@@ -130,4 +130,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

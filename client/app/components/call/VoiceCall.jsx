@@ -8,7 +8,7 @@ import { useState } from 'react';
 import axios from "axios";
 import { GET_CALL_TOKEN } from '@/utils/apiRoutes';
 
-const voiceCall = () => {
+const VoiceCall = () => {
     const dispatch = useDispatch();
     const { socket, currentUser, receiverUser } = useSelector( state => state.userSlice);
     const { voiceCall, incomingVoiceCall } = useSelector( state => state.callSlice );
@@ -152,4 +152,4 @@ const voiceCall = () => {
   )
 }
 
-export default voiceCall
+export default VoiceCall

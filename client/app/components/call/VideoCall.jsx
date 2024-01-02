@@ -5,7 +5,7 @@ import { MdCallEnd } from "react-icons/md";
 import Image from "next/image";
 import { useEffect } from 'react';
 
-const videoCall = () => {
+const VideoCall = () => {
     const dispatch = useDispatch();
     const { currentUser,receiverUser, socket } = useSelector( state => state.userSlice);
     const { videoCall, incomingVideoCall } = useSelector( state => state.callSlice );
@@ -47,4 +47,4 @@ const videoCall = () => {
   )
 }
 
-export default videoCall
+export default VideoCall

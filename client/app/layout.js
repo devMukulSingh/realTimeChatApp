@@ -18,8 +18,10 @@ export default function RootLayout({ children }) {
             <Providers>
           <QueryProviders>
               {children}
+              <div id='photo-picker-element'></div>
           </QueryProviders>
             </Providers>
+
       </body>
     </html>
  
