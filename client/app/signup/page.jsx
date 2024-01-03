@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import React, {useEffect, useState} from 'react';
 import logo from "../../public/whatsapp.gif";
-import avatarimg from "../../public/avatar.png";
+import defaultAvatar from "../../public/default_avatar.png";
 import { useDispatch, useSelector } from 'react-redux';
 import { ADD_USER_ROUTE } from '@/utils/apiRoutes';
 import axios from 'axios';
@@ -19,7 +19,7 @@ const Page = () => {
     about:'',
   }
 
-  const [profileImage, setProfileImage] = useState(avatarimg);
+  const [profileImage, setProfileImage] = useState(defaultAvatar);
   const[ newUserData, setNewUserData ] = useState(userData); 
   const { user } = useSelector( state => state.userSlice);
   const [firebaseUser, setFirebaseUser] = useState(null);
@@ -41,7 +41,7 @@ const Page = () => {
       console.log(currentUser);
       console.log( name,email,photoURL);
         setFirebaseUser({name,email,photoURL});
-        console.log(firebaseUser);
+        // console.log(firebaseUser);
       // dispatch(setUser({ name, email, photoURL}));
     }
 })
@@ -78,7 +78,8 @@ const handleCreateProfile = async() => {
           </div>
         </section>
         
-        <Avatar profileImage={profileImage} setProfileImage={setProfileImage}/>
+        <Avatar profileImage={profileImage} setProfileImage={setProfileImage} 
+        setNewUserData ={ setNewUserData } newUserData={newUserData}/>
       
       </main>
     

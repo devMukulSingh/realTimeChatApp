@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import logo from "../../public/whatsapp.gif";
 import Contacts from '../components/contactsSection/ContactsSection';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { firebaseAuth } from '@/utils/firebase.config';
 import { CHECK_USER_ROUTE } from '@/utils/apiRoutes';
 import { useRouter } from 'next/navigation';
@@ -30,6 +30,19 @@ const Page = () => {
     const [socketEvent, setSocketEvent] = useState(false);
     const { currentUser,receiverUser, } = useSelector( state => state.userSlice );
     const { voiceCall, videoCall, incomingVideoCall, incomingVoiceCall } = useSelector( state => state.callSlice);
+
+    //for logging out when the window is closed
+    useEffect ( () => {
+      const auth = getAuth();
+      const logoutOnWindowClose = () => {
+          signOut(auth).then( () => router.push("/")).
+          catch( (e) => console.log(e));
+      }
+      window.addEventListener( "beforeunload", logoutOnWindowClose);
+      return () => {
+        window.removeEventListener("beforeunload", logoutOnWindowClose)
+      }
+    },[])
 
     useEffect( () => {
       if(redirectLogin) router.push("/");

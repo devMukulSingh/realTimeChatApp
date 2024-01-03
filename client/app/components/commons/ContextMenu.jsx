@@ -22,7 +22,7 @@ export const ContextMenu = ( { options, coordinates, setOpenMenu , openMenu } ) 
     }
   return (
     <>
-        <div className="w-40 h-auto bg-white rounded-sm px-2  py-5" 
+        <main className="w-48 h-auto bg-white rounded-sm px-2  py-5 " 
             style={ { top:coordinates.Y, left: coordinates.X }} >
             <ul className='flex gap-1 flex-col'>
                 {
@@ -35,7 +35,7 @@ export const ContextMenu = ( { options, coordinates, setOpenMenu , openMenu } ) 
                     })
                 }
             </ul>
-        </div>
+        </main>
     </>
   )
 }
