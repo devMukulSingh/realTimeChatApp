@@ -1,4 +1,6 @@
 import  getprismaInstance  from "../utils/prismaClient.js";
+import { renameSync } from "fs";
+
 
 export const addMessageController = async(req,res,next) => {
 
@@ -14,6 +16,7 @@ try {
                      sender: { connect : { id:from }} ,
                      receiver: { connect : { id: to }} ,
                      messageStatus:" ",
+                     type:'text'
                  }
              })
              return res.json({ status:201, data:messages })
@@ -53,4 +56,33 @@ export const getMessageController = async(req,res,next) => {
     } catch (error) {
         next(`Error in get Message Controller ${error}`);
     }   
+}
+
+export const addImageMessageController = async(req,res,next) => {
+    try {
+        if(req.file){
+            console.log(req.file);
+            const date = Date.now();
+            const filename = 'uploads/images/' + date + req.file.originalname;
+            renameSync(req.file.path, filename);
+            const{ to,from } = req.query;
+            if(to && from ){
+                const prisma = getprismaInstance();
+                const message = await prisma.messages.create({
+                    data:{
+                        message:filename,
+                        sender : { connect: { id:from }},
+                        receiver : { connect : {id: to} },
+                        type:'image',
+                    }
+                })
+                return res.status(200).json(message);
+            }
+            return res.status(400).send('Required to and from');
+        }
+        return res.status(400).send('Image is required');
+    } catch (error) {
+        next(error);
+    }
+
 }

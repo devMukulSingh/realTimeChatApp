@@ -25,9 +25,9 @@ const userSlice = createSlice({
         },
 
         setSocketMessage : ( state,action ) => {
-            const{ senderId, message , created } = action.payload;
-            state.messages = [ ...state.messages, { senderId, message, created} ];
-            console.log(state.messages);
+            const{ senderId, message , created, type } = action.payload;
+            state.messages = [ ...state.messages, { senderId, message, created, type} ];
+            // console.log(state.messages);
         },
         setOpenSearchMessage : (state, action ) => {
             state.openSearchMessage = action.payload;
@@ -35,8 +35,8 @@ const userSlice = createSlice({
         setMessages : ( state,action ) => {
             state.messages = [];
             action.payload.map( (data) => {
-                const { message, created, senderId } = data;
-                state.messages.push( {message , created, senderId} );
+                const { message, created, senderId, type } = data;
+                state.messages.push( {message , created, senderId, type} );
             })
         },
         setSearchMessages : (state,action ) => {

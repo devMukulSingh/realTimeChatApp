@@ -5,6 +5,7 @@ module.exports = {
       NEXT_PUBLIC_ZEGO_SERVER_ID:'d2e9d77703dee4f36de373db41bf1d5d'
     },
     images: {
+      domains: ["localhost"],
       remotePatterns: [
         {
           protocol: 'https',

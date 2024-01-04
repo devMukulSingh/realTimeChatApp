@@ -12,6 +12,7 @@ const PORT  = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
+app.use("/uploads/images", express.static("uploads/images"));
 app.use("/api/auth",authRoutes);
 app.use("/api/message",messageRoutes);
 

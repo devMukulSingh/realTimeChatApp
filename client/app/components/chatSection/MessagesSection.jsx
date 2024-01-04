@@ -7,6 +7,7 @@ import {  setOpenSearchMessage, setMessages, setSearchMessages } from '@/redux/u
 import SearchMessages from './SearchMessages';
 import { useRef } from 'react';
 import { useQueryClient, useQuery } from "@tanstack/react-query"
+import SingleImageMessage from './SingleImageMessage';
 ///////////////////////////////////////////////////////////////
 
 const MessagesSection = () => {
@@ -59,7 +60,8 @@ const MessagesSection = () => {
               <>
                 {
                   messages && messages?.map( (currUser,index) => {
-
+ 
+                    if(currUser.type === 'image') return ( <SingleImageMessage message = { currUser } /> )
                     return (
                       <SingleMessage currUser = {currUser} key={index}/>
                       )

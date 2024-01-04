@@ -5,11 +5,12 @@ import {BsEmojiLaughing} from "react-icons/bs";
 import {AiOutlinePlus} from "react-icons/ai";
 import {IoSendSharp } from "react-icons/io5";
 import { useDispatch, useSelector } from 'react-redux';
-import { ADD_MESSAGE_ROUTE } from "../../../utils/apiRoutes";
+import { ADD_IMAGE_MESSAGE_ROUTE, ADD_MESSAGE_ROUTE } from "../../../utils/apiRoutes";
 import EmojiPicker  from "emoji-picker-react";
 import { useEffect } from 'react';
 import { useRef } from 'react';
 import { setSocketMessage } from '@/redux/userSlice';
+import PhotoPicker from '../commons/PhotoPicker';
 
   const Footer = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,35 @@ import { setSocketMessage } from '@/redux/userSlice';
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef(null);
+  const [grabPhoto, setGrabPhoto] = useState(false);
+
+  useEffect( () => {
+    const handleOutsideEmojiClick = (e) => {
+      if(e.target.id !== 'emoji-open'){
+        if( emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)){
+          setShowEmojiPicker(false);
+        }
+      }
+    }
+    document.addEventListener( 'click' , handleOutsideEmojiClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideEmojiClick);
+    }
+  },[])
+
+  useEffect( () => {
+    if(grabPhoto){
+      const photoPickerElement = document.getElementById("photo-picker");
+      photoPickerElement.click();
+
+      document.body.onfocus = function(){ // setting the grabPhoto state to false as the file is selected from the dialog box, after waiting for 1 second
+        setTimeout( () => {
+          setGrabPhoto(false);
+        },1000);
+      }
+    }
+  },[grabPhoto]);
+
 
   const handleMessageChange = (e) => {
       setMessage(e.target.value);
@@ -50,19 +80,46 @@ import { setSocketMessage } from '@/redux/userSlice';
   const handleEmojiClick = (emoji) => {
     setMessage( (prevMessage) => ( prevMessage += emoji.emoji));
   }
-  useEffect( () => {
-    const handleOutsideEmojiClick = (e) => {
-      if(e.target.id !== 'emoji-open'){
-        if( emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)){
-          setShowEmojiPicker(false);
-        }
-      }
-    }
-    document.addEventListener( 'click' , handleOutsideEmojiClick);
-    return () => {
-      document.removeEventListener('click', handleOutsideEmojiClick);
-    }
-  },[])
+
+  const handlePhotoSelector = () => {
+    // alert('clicked');
+    setGrabPhoto(true);
+
+  }
+  const photoPickerChange = async(e) => {
+    try {
+  
+     const formData = new FormData();
+     const file = e.target.files[0];
+     formData.append('image',file);
+ 
+     const res = await axios.post(ADD_IMAGE_MESSAGE_ROUTE, formData , {
+       headers:{
+         'Content-Type' : 'multipart/form-data',
+       },
+       params:{
+         to:currentUser.id,
+         from : receiverUser.id
+       }
+     });
+ 
+     if(res.status === 200){
+ 
+      const { message } = res.data
+       socket.current.emit("send-msg", {
+         to:receiverUser.id,
+         from:currentUser.id,
+         message:message,
+         created: Date.now()
+       })
+       dispatch( setSocketMessage(res.data));
+     }
+ } catch (error) {
+    console.log(`Error in PhotoPickerChange ${error}`);
+ }  
+
+  };
+
   return (
     <>
         <main className='flex w-full px-5 py-3 gap-4 items-center h-20 bg-[#202C33] absolute bottom-0'>
@@ -73,7 +130,7 @@ import { setSocketMessage } from '@/redux/userSlice';
                 <EmojiPicker onEmojiClick={ handleEmojiClick } />
             </div>
           }
-          <AiOutlinePlus className="text-3xl cursor-pointer text-white"/>
+          <AiOutlinePlus className="text-3xl cursor-pointer text-white" onClick={ handlePhotoSelector }/>
           <div className='bg-[#2A3942] w-11/12 h-12  rounded-xl flex gap-8 p-2'>
             <input type="text" placeholder='Type a message' value = {message} onChange={ handleMessageChange }
               className='w-full h-full rounded-xl bg-[#2A3942] focus:outline-none text-white text-lg' 
@@ -81,7 +138,8 @@ import { setSocketMessage } from '@/redux/userSlice';
           </div>
           <IoSendSharp className='text-white text-3xl cursor-pointer ml-auto' onClick={ handleMessageSend }/>
         </main>
-        
+
+        { grabPhoto && <PhotoPicker onChange={ photoPickerChange }/> }
     </>
   )
 }

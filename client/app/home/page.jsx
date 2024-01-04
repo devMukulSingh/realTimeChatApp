@@ -32,17 +32,17 @@ const Page = () => {
     const { voiceCall, videoCall, incomingVideoCall, incomingVoiceCall } = useSelector( state => state.callSlice);
 
     //for logging out when the window is closed
-    useEffect ( () => {
-      const auth = getAuth();
-      const logoutOnWindowClose = () => {
-          signOut(auth).then( () => router.push("/")).
-          catch( (e) => console.log(e));
-      }
-      window.addEventListener( "beforeunload", logoutOnWindowClose);
-      return () => {
-        window.removeEventListener("beforeunload", logoutOnWindowClose)
-      }
-    },[])
+    // useEffect ( () => {
+    //   const auth = getAuth();
+    //   const logoutOnWindowClose = () => {
+    //       signOut(auth).then( () => router.push("/")).
+    //       catch( (e) => console.log(e));
+    //   }
+    //   window.addEventListener( "beforeunload", logoutOnWindowClose);
+    //   return () => {
+    //     window.removeEventListener("beforeunload", logoutOnWindowClose)
+    //   }
+    // },[])
 
     useEffect( () => {
       if(redirectLogin) router.push("/");
