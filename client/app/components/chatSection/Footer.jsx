@@ -82,10 +82,10 @@ import PhotoPicker from '../commons/PhotoPicker';
   }
 
   const handlePhotoSelector = () => {
-    // alert('clicked');
     setGrabPhoto(true);
 
   }
+  // for uploading Image to the server
   const photoPickerChange = async(e) => {
     try {
   
@@ -105,12 +105,13 @@ import PhotoPicker from '../commons/PhotoPicker';
  
      if(res.status === 200){
  
-      const { message } = res.data
+      const { message,type } = res.data
        socket.current.emit("send-msg", {
          to:receiverUser.id,
          from:currentUser.id,
          message:message,
-         created: Date.now()
+         created: Date.now(),
+         type: type
        })
        dispatch( setSocketMessage(res.data));
      }

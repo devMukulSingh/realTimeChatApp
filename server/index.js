@@ -47,7 +47,7 @@ io.on("connection", (socket) => {
     
     socket.on("send-msg", (data) => {  //data contains {senderId,receiverId,messagetoBeSend} (coming from the frontend)
         // console.log(data);
-        const senderSocket = onlineUsers.get(data?.to);
+        const senderSocket = onlineUsers.get(data.to);
         // console.log(onlineUsers);
 
         if(senderSocket){
@@ -55,7 +55,8 @@ io.on("connection", (socket) => {
             socket.to(senderSocket).emit("msg-receive",{
                 senderId:data.from,
                 message:data.message,
-                created:data.created
+                created:data.created,
+                type: data.type
             }) 
         } 
     })
