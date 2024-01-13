@@ -1,6 +1,8 @@
-import getprismaInstance from "../utils/prismaClient.js";
-import  generateToken04 from "../utils/generateToken04.js";
-  
+
+import 'dotenv/config'
+import { generateToken04 } from "../utils/generateToken04.js"; 
+import getprismaInstance from '../utils/prismaClient.js';
+
 export const checkUserController = async(req,res,next) => {
    try {
     const{ email } = req.body;
@@ -67,15 +69,16 @@ export const generateTokenController = async(req,res,next) =>{
     const payload = "";
     const effectiveTime = 3600;
  
+ 
     if(appId && serverSecret && userId ){
        const token = generateToken04(
           appId,
-          serverSecret,
           userId,
+          serverSecret,
+          effectiveTime,
           payload,
-          effectiveTime
-       );
-       return res.status(201).json(token);
+       ); 
+       return res.status(200).json({token});
     }
     return res.status(400).send('appId, serverSecret and userId required');
   } catch (error) {

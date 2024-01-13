@@ -61,6 +61,8 @@ io.on("connection", (socket) => {
         } 
     })
 
+    // 3rd step for voice call // 4th step->page.jsx(home)
+    // emmitting incoming-voice-call event as we have the data of caller to the receiver's end
     socket.on("outgoing-voice-call", (data) => {
         // console.log(data);
         const senderSocket = onlineUsers.get(data.to);
@@ -75,6 +77,7 @@ io.on("connection", (socket) => {
         }
     })
 
+    // 3rd step for video call
     socket.on("outgoing-video-call", (data) => {
         const senderSocket = onlineUsers.get(data.to);
         console.log(data);
@@ -98,7 +101,9 @@ io.on("connection", (socket) => {
         if(senderSocket){
             socket.to(senderSocket).emit("video-call-rejected");
         }
-    })
+    });
+
+    // 8th step for voice call(at receiver's side) // 9th step-> voiceCall.jsx
     socket.on("accept-incoming-call", (data) => {
         const senderSocket = onlineUsers.get(data.to);
         if(senderSocket){

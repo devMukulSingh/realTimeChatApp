@@ -31,7 +31,7 @@ const Page = () => {
     const { currentUser,receiverUser, } = useSelector( state => state.userSlice );
     const { voiceCall, videoCall, incomingVideoCall, incomingVoiceCall } = useSelector( state => state.callSlice);
 
-    //for logging out when the window is closed
+    // for logging out when the window is closed
     // useEffect ( () => {
     //   const auth = getAuth();
     //   const logoutOnWindowClose = () => {
@@ -63,12 +63,15 @@ const Page = () => {
           dispatch(setSocketMessage(data));
         })
       }
-
+      // 5th step for voice call(at receiver's side)  // 6th step-> incomingVoiceCallComp.jsx
+      // dispatching sender's data at the receiver's end to establish a socket connection
       socket.current.on("incoming-voice-call",(data) => {
         console.log(data);
         dispatch(setIncomingVoiceCall(data));
       })
-    
+      
+      // 5th step for video call(at receiver's side)  // 6th step-> incomingvideoCallComp.jsx
+      // dispatching sender's data at the receiver's end to establish a socket connection
       socket.current.on("incoming-video-call",(data) => {
         console.log(data);
         dispatch(setIncomingVideoCall(data));

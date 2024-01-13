@@ -20,7 +20,10 @@ const Header = () => {
   const handleCloseSearchBtn = () => {
     dispatch(setOpenSearchMessage(false));
   }
-  const handleVoiceCall = () => {
+
+  //1st step for voice call // 2nd - VoiceCall.jsx
+  //dispatching the receiver's(who will receive the call) data to establish a socket connection as soon as click on the call icon
+  const handleVoiceCall = () => { 
     dispatch(setVoiceCall({
       ...receiverUser,
       type: 'out-going',

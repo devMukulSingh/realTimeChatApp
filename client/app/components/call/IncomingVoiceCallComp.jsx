@@ -20,12 +20,14 @@ const IncomingVoiceCallComp = () => {
         to:incomingVoiceCall.from.id,
       })
   }
+
+  // 7th step for voice call (at receiver's side ) // 8th step->index.js
   const handleAcceptCall = () => {
     dispatch(setVoiceCall({
       ...incomingVoiceCall, type:"in-coming"
     }));
     
-    socket.current.emit("accept-incoming-call",{
+    socket.current.emit("accept-incoming-call",{ 
       id:incomingVoiceCall.id
     });
 
