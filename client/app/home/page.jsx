@@ -55,6 +55,7 @@ const Page = () => {
         dispatch(setSocket({...socket}));
       }
     },[currentUser, receiverUser, socket]);
+    
     useEffect(() => {
       if(socket.current){
         socket.current.on("msg-receive", (data) => {

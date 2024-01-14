@@ -19,7 +19,9 @@ const callSlice = createSlice({
             state.videoCall = action.payload;
         },
         setIncomingVoiceCall : (state,action) => {
+            console.log(action.payload);
             state.incomingVoiceCall = action.payload;
+            console.log(state.incomingVoiceCall);
         },
         setIncomingVideoCall : (state,action) => {
             state.incomingVideoCall = action.payload;
