@@ -23,7 +23,7 @@ const server = app.listen(PORT, () => {
 
 const io = new Server(server, {
     cors : {
-        // origin: "https://mukul-chat-app.vercel.app/"
+        // origin: "https://mukul-chat-app.vercel.app"
         origin: "http://localhost:3000"
 
     }

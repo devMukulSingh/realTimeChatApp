@@ -1,14 +1,12 @@
 'use client'
 import Image from 'next/image';
-import React, {useEffect, useState} from 'react';
+import React, { useState} from 'react';
 import logo from "../../public/whatsapp.gif";
 import defaultAvatar from "../../public/default_avatar.png";
-import { useDispatch, useSelector } from 'react-redux';
-import { ADD_USER_ROUTE } from '@/utils/apiRoutes';
+import { ADD_USER_ROUTE } from '../../utils/apiRoutes';
 import axios from 'axios';
 import { onAuthStateChanged } from 'firebase/auth';
-import { firebaseAuth } from '@/utils/firebase.config';
-import { setUser } from '@/redux/userSlice';
+import { firebaseAuth } from '../../utils/firebase.config';
 import { useRouter } from 'next/navigation';
 import Avatar from '../components/commons/Avatar';
 
@@ -21,19 +19,9 @@ const Page = () => {
 
   const [profileImage, setProfileImage] = useState(defaultAvatar);
   const[ newUserData, setNewUserData ] = useState(userData); 
-  const { user } = useSelector( state => state.userSlice);
   const [firebaseUser, setFirebaseUser] = useState(null);
   const router = useRouter();
  
-  // useEffect( () => {
-  //   getDataFromRedux();
-  // },[]);
-  // const getDataFromRedux = () => {
-  //   const{ user } = useSelector( state => state.userSlice );
-  //   console.log(user);
-  // }
-
-
   
   onAuthStateChanged( firebaseAuth, async(currentUser) => {
     if( firebaseUser===null && currentUser){
