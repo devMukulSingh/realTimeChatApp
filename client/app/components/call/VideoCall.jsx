@@ -1,5 +1,5 @@
 import React from 'react'
-import { setEndCall } from "@/redux/callSlice.js";
+import { setEndCall } from "../../../redux/callSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { MdCallEnd } from "react-icons/md";
 import Image from "next/image";

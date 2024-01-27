@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { setReceiverUser } from '@/redux/userSlice';
+import { setReceiverUser } from '../../../redux/userSlice';
 import { useDispatch } from 'react-redux';
 ///////////////////////////////////////
 

@@ -6,8 +6,8 @@ import {BsThreeDotsVertical} from "react-icons/bs";
 import { IoMdClose } from 'react-icons/io';
 import { FaVideo } from "react-icons/fa";
 import { IoCallSharp } from "react-icons/io5";
-import { setOpenSearchMessage } from '@/redux/userSlice';
-import {  setVideoCall, setVoiceCall, setIncomingVoiceCall, setIncomingVideoCall } from '@/redux/callSlice';
+import { setOpenSearchMessage } from '../../../redux/userSlice';
+import {  setVideoCall, setVoiceCall, setIncomingVoiceCall, setIncomingVideoCall } from '../../../redux/callSlice';
 
 const Header = () => {
   

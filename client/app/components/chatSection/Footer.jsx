@@ -9,9 +9,10 @@ import { ADD_IMAGE_MESSAGE_ROUTE, ADD_MESSAGE_ROUTE } from "../../../utils/apiRo
 import EmojiPicker  from "emoji-picker-react";
 import { useEffect } from 'react';
 import { useRef } from 'react';
-import { setSocketMessage } from '@/redux/userSlice';
+import { setSocketMessage } from '../../../redux/userSlice';
 import PhotoPicker from '../commons/PhotoPicker';
 import { useMutation } from "@tanstack/react-query";
+import ImageUpload from '../commons/ImageUpload';
 
   const Footer = () => {
   const dispatch = useDispatch();
@@ -31,12 +32,14 @@ import { useMutation } from "@tanstack/react-query";
       console.log(`Error in message POST request ${error}`);
     },
     onSuccess : (data) => {
-
+      const { message, type } = data.data.data;
+        console.log(data);
         socket.current.emit("send-msg", {
-        from:currentUser.id,
-        to:receiverUser.id, 
-        message:data.data.data.message,
-        created: Date.now()
+          from:currentUser.id,
+          to:receiverUser.id, 
+          message:message,
+          created: Date.now(),
+          type:type,
       }) 
       dispatch(setSocketMessage(data.data.data));
       setMessage("");  
@@ -78,7 +81,12 @@ import { useMutation } from "@tanstack/react-query";
       setMessage(e.target.value);
   }
   const handleMessageSend = async(e) => { 
-    mutation.mutate({ message:message, from:currentUser?.id, to:receiverUser?.id , type:'sent'});
+    mutation.mutate({ message, from:currentUser?.id, to:receiverUser?.id, type:'text'});
+  }
+  const handleImageSend = async(url) => {
+    setMessage(url);
+    console.log(url);
+    mutation.mutate({ message:url, from:currentUser?.id, to:receiverUser?.id, type:'image'});
   }
   const keyMessageSend = (e) => {
     if(e.key === 'Enter') handleMessageSend();
@@ -139,7 +147,10 @@ import { useMutation } from "@tanstack/react-query";
                 <EmojiPicker onEmojiClick={ handleEmojiClick } />
             </div>
           }
-          <AiOutlinePlus className="text-3xl cursor-pointer text-white" onClick={ handlePhotoSelector }/>
+          {/* <AiOutlinePlus className="text-3xl cursor-pointer text-white" onClick={ handlePhotoSelector }/> */}
+          <ImageUpload
+            onChange={ (url) => handleImageSend(url) }
+          />
           <div className='bg-[#2A3942] w-11/12 h-12  rounded-xl flex gap-8 p-2'>
             <input type="text" 
               placeholder='Type a message' 

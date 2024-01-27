@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
-import { setEndCall, setIncomingVideoCall } from '@/redux/callSlice';
+import { setEndCall, setIncomingVideoCall } from '../../../redux/callSlice';
 
 const IncomingVideoCallComp = () => {
 

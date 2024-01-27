@@ -1,4 +1,4 @@
-import { setSearchMessages } from '@/redux/userSlice';
+import { setSearchMessages } from '../../../redux/userSlice';
 import React, { useState } from 'react';
 import {ImSearch} from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";

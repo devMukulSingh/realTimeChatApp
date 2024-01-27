@@ -1,11 +1,11 @@
 import React from 'react';
-import { setEndCall } from "@/redux/callSlice";
+import { setEndCall } from "../../../redux/callSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { MdCallEnd } from 'react-icons/md';
 import Image from "next/image";
 import { useEffect,useState } from 'react';
 import axios from "axios";
-import { GET_CALL_TOKEN } from '@/utils/apiRoutes';
+import { GET_CALL_TOKEN } from '../../../utils/apiRoutes';
 
 const Container = ({data:receiverUser}) => {
 

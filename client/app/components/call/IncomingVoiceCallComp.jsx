@@ -1,9 +1,9 @@
 import React,{useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
-import { setEndCall, setIncomingVoiceCall, setVoiceCall } from '@/redux/callSlice';
+import { setEndCall, setIncomingVoiceCall, setVoiceCall } from '../../../redux/callSlice';
 import { useEffect } from 'react';
-import { GET_CALL_TOKEN } from '@/utils/apiRoutes';
+import { GET_CALL_TOKEN } from '../../../utils/apiRoutes';
 import axios from "axios";
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

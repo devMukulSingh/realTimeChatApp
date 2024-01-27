@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SingleContact from './SingleContact';
-import { GET_USERS_ROUTE } from '@/utils/apiRoutes';
+import { GET_USERS_ROUTE } from '../../../utils/apiRoutes';
 import axios from "axios";
 import Spinner from '../commons/Spinner';
 import { useQuery } from "@tanstack/react-query"

@@ -5,23 +5,25 @@ import { renameSync } from "fs";
 export const addMessageController = async(req,res,next) => {
 
 try {
-        const{ message,to,from } = req.body;
+        const{ message,to,from,type } = req.body;
+
+        if( !message ) return res.json({msg:'message is required', status:400});
+        if( !to ) return res.json({msg:'to is required', status:400});
+        if( !from ) return res.json({msg:'from is required', status:400});
+        if( !type ) return res.json({ msg:'type is required', status:400});
         
-        if(message && to && from ){
-    
-             const prisma = getprismaInstance();
-             const messages = await prisma.messages.create({
-                 data:{
-                     message:message,
-                     sender: { connect : { id:from }} ,
-                     receiver: { connect : { id: to }} ,
-                     messageStatus:" ",
-                     type:'text'
-                 }
+        const prisma = getprismaInstance();
+        const messages = await prisma.messages.create({
+            data:{
+                message,
+                type,
+                sender: { connect : { id:from }} ,
+                receiver: { connect : { id: to }} ,
+                messageStatus:" ",
+                
+                }
              })
              return res.json({ status:201, data:messages })
-        }
-        return res.json({ status:500 , msg:"To, From and message is required"});
 } catch (error) {
     next(`Error in addMessageController ${error}`);
 }

@@ -1,12 +1,11 @@
-import { GET_MESSAGES_ROUTE } from '@/utils/apiRoutes';
+import { GET_MESSAGES_ROUTE } from '../../../utils/apiRoutes';
 import SingleMessage from './SingleMessage';
 import  axios  from 'axios';
 import React, { useEffect} from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import {  setOpenSearchMessage, setMessages, setSearchMessages } from '@/redux/userSlice';
+import {  setOpenSearchMessage, setMessages, setSearchMessages } from '../../../redux/userSlice';
 import SearchMessages from './SearchMessages';
 import { useRef } from 'react';
-import SingleImageMessage from './SingleImageMessage';
 import Spinner from '../commons/Spinner';
 import { useState } from 'react';
 ///////////////////////////////////////////////////////////////
@@ -59,7 +58,6 @@ const MessagesSection = () => {
               loading ? <Spinner/> : 
                 messages.length !== 0 ?
                   messages?.map( (currUser,index) => {
-                    if(currUser.type === 'image') return ( <SingleImageMessage message = { currUser } /> )
                       return (
                         <SingleMessage currUser = {currUser} key={index}/>
                         )
