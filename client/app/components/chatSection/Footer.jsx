@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { useRef } from 'react';
 import { setSocketMessage } from '@/redux/userSlice';
 import PhotoPicker from '../commons/PhotoPicker';
+import { useMutation } from "@tanstack/react-query";
 
   const Footer = () => {
   const dispatch = useDispatch();
@@ -19,18 +20,42 @@ import PhotoPicker from '../commons/PhotoPicker';
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const emojiPickerRef = useRef(null);
   const [grabPhoto, setGrabPhoto] = useState(false);
+  
+  const mutation = useMutation({
+    mutationFn : (data) => {
+      return axios.post(ADD_MESSAGE_ROUTE,data);
+    },
+    mutationKey: ['postMessage'],
+    
+    onError : (error) => {
+      console.log(`Error in message POST request ${error}`);
+    },
+    onSuccess : (data) => {
+
+        socket.current.emit("send-msg", {
+        from:currentUser.id,
+        to:receiverUser.id, 
+        message:data.data.data.message,
+        created: Date.now()
+      }) 
+      dispatch(setSocketMessage(data.data.data));
+      setMessage("");  
+    }
+  })
 
   useEffect( () => {
-    const handleOutsideEmojiClick = (e) => {
-      if(e.target.id !== 'emoji-open'){
-        if( emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)){
-          setShowEmojiPicker(false);
+    if(showEmojiPicker){
+      const handleOutsideEmojiClick = (e) => {
+        if(e.target.id !== 'emoji-open'){
+          if( emojiPickerRef.current && !emojiPickerRef.current.contains(e.target)){
+            setShowEmojiPicker(false);
+          }
         }
       }
-    }
-    document.addEventListener( 'click' , handleOutsideEmojiClick);
-    return () => {
-      document.removeEventListener('click', handleOutsideEmojiClick);
+      document.addEventListener( 'click' , handleOutsideEmojiClick);
+      return () => {
+        document.removeEventListener('click', handleOutsideEmojiClick);
+      }
     }
   },[])
 
@@ -39,41 +64,25 @@ import PhotoPicker from '../commons/PhotoPicker';
       const photoPickerElement = document.getElementById("photo-picker");
       photoPickerElement.click();
 
-      document.body.onfocus = function(){ // setting the grabPhoto state to false as the file is selected from the dialog box, after waiting for 1 second
-        setTimeout( () => {
+      document.body.onfocus = function(){ // setting the grabPhoto state to false as the file is selected from the dialog box,
+        setTimeout( () => {               // after waiting for 1 second
           setGrabPhoto(false);
         },1000);
       }
     }
   },[grabPhoto]);
 
+    //socket.emit is used to emit or send an event and data from the client to the server side     
 
   const handleMessageChange = (e) => {
       setMessage(e.target.value);
   }
-
-  const handleMessageSend = async(e) => {
-    try {
-      const { data } = await axios.post(ADD_MESSAGE_ROUTE, { message:message, from:currentUser?.id, to:receiverUser?.id , type:'sent'}  );
-      // console.log(socket);
-      //socket.emit is used to emit or send an event and data from the client to the server side
-      
-          socket.current.emit("send-msg", {
-            from:currentUser?.id,
-            to:receiverUser?.id, 
-            message:data?.data?.message,
-            created: Date.now()
-          }) 
-          dispatch(setSocketMessage(data?.data));
-          setMessage("");
-        } catch (error) {
-          console.log(`Error in handleMessageSend ${error}`);
-        }      
-    }
+  const handleMessageSend = async(e) => { 
+    mutation.mutate({ message:message, from:currentUser?.id, to:receiverUser?.id , type:'sent'});
+  }
   const keyMessageSend = (e) => {
     if(e.key === 'Enter') handleMessageSend();
   }
-
   const handleEmojiPicker = () => {
     setShowEmojiPicker(!showEmojiPicker);
   }
@@ -88,10 +97,9 @@ import PhotoPicker from '../commons/PhotoPicker';
   // for uploading Image to the server
   const photoPickerChange = async(e) => {
     try {
-  
-     const formData = new FormData();
-     const file = e.target.files[0];
-     formData.append('image',file);
+      const formData = new FormData();
+      const file = e.target.files[0];
+      formData.append('image',file);
  
      const res = await axios.post(ADD_IMAGE_MESSAGE_ROUTE, formData , {
        headers:{
@@ -133,7 +141,10 @@ import PhotoPicker from '../commons/PhotoPicker';
           }
           <AiOutlinePlus className="text-3xl cursor-pointer text-white" onClick={ handlePhotoSelector }/>
           <div className='bg-[#2A3942] w-11/12 h-12  rounded-xl flex gap-8 p-2'>
-            <input type="text" placeholder='Type a message' value = {message} onChange={ handleMessageChange }
+            <input type="text" 
+              placeholder='Type a message' 
+              value = {message} 
+              onChange={ handleMessageChange }
               className='w-full h-full rounded-xl bg-[#2A3942] focus:outline-none text-white text-lg' 
               onKeyDown={ keyMessageSend } />
           </div>

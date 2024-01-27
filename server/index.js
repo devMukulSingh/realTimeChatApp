@@ -52,9 +52,9 @@ io.on("connection", (socket) => {
 
         if(senderSocket){
             // console.log('inside');
-            socket.to(senderSocket).emit("msg-receive",{
-                senderId:data.from,
-                message:data.message,
+            socket.to(senderSocket).emit("msg-receive",{ //new event is emmitted at the receiver's side,after the message is received
+                senderId:data.from,                    //from the sender using "send-msg" event, to send the message to the receiver.
+                message:data.message,                  // this event is then handled at the receiver's home page
                 created:data.created,
                 type: data.type
             }) 

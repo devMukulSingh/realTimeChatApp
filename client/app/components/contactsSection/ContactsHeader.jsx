@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { CiMenuKebab } from "react-icons/ci";
 import { RiChatNewFill } from "react-icons/ri";
-import avatar from "../../../public/1.png";
 import ProfileContextMenu from '../commons/ProfileContextMenu';
 
 const ContactsHeader = () => {
 
-  const  { user, currentUser }  = useSelector( state => state.userSlice );
+  const  { currentUser }  = useSelector( state => state.userSlice );
   const [openContextMenu, setOpenContextMenu] = useState(false);
 
   const handleProfileClick = () => {

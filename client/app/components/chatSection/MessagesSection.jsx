@@ -1,78 +1,75 @@
 import { GET_MESSAGES_ROUTE } from '@/utils/apiRoutes';
 import SingleMessage from './SingleMessage';
 import  axios  from 'axios';
-import React, { useEffect, useState} from 'react';
+import React, { useEffect} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {  setOpenSearchMessage, setMessages, setSearchMessages } from '@/redux/userSlice';
 import SearchMessages from './SearchMessages';
 import { useRef } from 'react';
-import { useQueryClient, useQuery } from "@tanstack/react-query"
 import SingleImageMessage from './SingleImageMessage';
+import Spinner from '../commons/Spinner';
+import { useState } from 'react';
 ///////////////////////////////////////////////////////////////
 
 const MessagesSection = () => {
-
-  const dispatch = useDispatch();
-  const{ receiverUser, currentUser, messages,
-        openSearchMessage } = useSelector(state => state.userSlice);
-  const componentRef = useRef();
-  const queryClient = useQueryClient();
-
-  useEffect( () => {
-    getMessages();
-    // queryClient.invalidateQueries(['getMessages', receiverUser]);
-  },[receiverUser])
-
-  useEffect(() => {
-    dispatch(setOpenSearchMessage(false));
-    dispatch(setSearchMessages([]));
-  }, [receiverUser,messages]);
   
-  useEffect( () => {
-      const componentHeight = componentRef.current.scrollHeight;
-      componentRef.current.scrollTo(0,componentHeight);
-    },[messages,receiverUser])
+  const{ receiverUser, currentUser,messages,
+    openSearchMessage } = useSelector(state => state.userSlice);
+    const dispatch = useDispatch();
+    const componentRef = useRef();
+    const [loading, setLoading] = useState(false);
     
     const getMessages = async() => {
-      const { data }  = await axios.get(GET_MESSAGES_ROUTE, 
-        { params :{to :receiverUser?.id , from : currentUser?.id} });
-        // return data;
-        dispatch(setMessages(data));
+      try{
+          setLoading(true);
+          const { data }  = await axios.get(GET_MESSAGES_ROUTE,{ params :{to :receiverUser?.id , from : currentUser?.id} });
+          dispatch(setMessages(data));
+        }
+        catch(e){
+          console.log(`Error in get Messages ${e}`);
+        }
+        finally{
+          setLoading(false);
+        }
       };
+  
+    useEffect( () => {
+        const componentHeight = componentRef.current?.scrollHeight;
+        componentRef?.current?.scrollTo(0,componentHeight);
+      },[receiverUser,messages]);
 
-      // const{ isLoading, data:queryMessages, isError,error} = useQuery( 
-      //   { queryFn : getMessages, 
-      //     queryKey: ['getMessages',receiverUser],    
-      //     });    
-      // if(isError) console.log(error.message);
-
-      
+    useEffect(() => {
+      getMessages();
+      if(setOpenSearchMessage){
+        dispatch(setOpenSearchMessage(false));
+        dispatch(setSearchMessages([]));
+      }
+    }, [receiverUser]);
+    
+    
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   return (
     
       <main className={` ${openSearchMessage ? 'grid grid-cols-2' : {} } 
-        w-full gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20 `} ref={componentRef} >
+        w-full gap-1 h-[calc(100vh-10.25rem)] overflow-x-scroll overflow-y-auto bg-[#111b21] text-white py-4 px-20 `} 
+        ref={componentRef} >
         
         <section className='flex flex-col gap-1'>
-          {  
-              // !isLoading && queryMessages?.length != 0 ?
-              messages?.length != 0 ?
-              <>
-                {
-                  messages && messages?.map( (currUser,index) => {
- 
+            {
+              loading ? <Spinner/> : 
+                messages.length !== 0 ?
+                  messages?.map( (currUser,index) => {
                     if(currUser.type === 'image') return ( <SingleImageMessage message = { currUser } /> )
-                    return (
-                      <SingleMessage currUser = {currUser} key={index}/>
-                      )
-                    })
-                  }
-                </>
-              :
+                      return (
+                        <SingleMessage currUser = {currUser} key={index}/>
+                        )
+                      })
+                  :
               <div className='text-white'>
                 No messages found
               </div>
-          }
+              }
+          
           </section>
 
           <section>

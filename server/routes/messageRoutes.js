@@ -3,7 +3,7 @@ import multer from "multer";
 import { addImageMessageController, addMessageController, getMessageController } from "../controllers/messageController.js";
 
 const router = express.Router();
-const uploadImage = multer({ dest:'/uploads/images' });
+const uploadImage = multer({ dest:'uploads/images' });
 
 router.post("/add-message",addMessageController);
 router.get("/get-messages",getMessageController);

@@ -12,7 +12,7 @@ const Contacts = () => {
     <>
         <main className='bg-[#111B21] h-full flex flex-col gap-3'>
             <ContactsHeader/>
-            <SearchBar/>
+              <SearchBar/>
             <ContactsList/>
         </main>
 

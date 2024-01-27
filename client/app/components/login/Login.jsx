@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import axios from "axios";
 import Image from 'next/image';
 import { FcGoogle } from "react-icons/fc";
@@ -10,17 +10,20 @@ import {  useRouter } from 'next/navigation';
 import { setCurrentUser } from '@/redux/userSlice';
 import { useDispatch } from 'react-redux';
 import logo from "../../../public/whatsapp.gif";
+import Spinner from '../commons/Spinner';
 
 const Login = () => {
+
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const dispatch = useDispatch();
   
   const handleLogin = async() => {
     try {
+      setLoading(true);
       const provider = new GoogleAuthProvider();
       const { user : { displayName:name,email, photoURL, id } } = await signInWithPopup( firebaseAuth, provider);
-      
       if(email){
         const { data } = await axios.post(CHECK_USER_ROUTE, { email } );
         const { id } = data?.data;
@@ -37,12 +40,17 @@ const Login = () => {
     } catch (error) {
       console.log(`Error in handle login ${error}`);
     }
+    finally{
+      setLoading(false);
+    }
 
   }
   return (
     <main className='h-screen w-screen flex flex-col bg-[#202C33] text-white items-center justify-center gap-10'>
-
-      <div className='' id='context-opener'>
+{   
+    loading ? <Spinner/> : 
+    <>
+     <div className='' id='context-opener'>
         <Image src={logo} alt="logo" width={300} height={300}/>
       </div>
 
@@ -54,6 +62,8 @@ const Login = () => {
           </p>
       </div>
 
+    </>
+      }
     </main>
   )
 }
